@@ -1,0 +1,118 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="<%= request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/MainPage.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/중분류페이지공통스타일.css">
+<style type="text/css">
+table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        background-color: #808080;
+        color: #fff;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #422700;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+</style>
+</head>
+<%
+	List<MemberVO> blackList = (List<MemberVO>)request.getAttribute("blackList");
+%>
+
+<body>
+<script>
+$(function(){
+	$('#memberList').click(function(){
+		location.href = "<%=request.getContextPath()%>/memberListAdmin.do";
+	})
+})
+</script>
+
+	<%@ include file="../admin/view/AdminView.jsp" %>
+	<%@ include file="../admin/view/AdminsmallBar.jsp" %>
+
+<div id="section">
+	<h3 style="text-align: center;">블랙리스트 목록</h3>
+
+	<div class="hr" style="margin-bottom: 50px;"></div>
+
+	<table border='1' class="table table-striped">
+		<tr>
+			<th>신고번호</th>
+			<th>회원아이디</th>
+			<th>회원명</th>
+			<th>회원이메일</th>
+			<th>신고사유</th>
+			<th>신고날짜</th>
+			<th>신고자아이디</th>
+		</tr>
+	
+	<%
+		for(int i=0; i<blackList.size(); i++) {
+			String report = "";
+			if(blackList.get(i).getReport_id() == null) {
+							
+				
+				report = "신고자가 없습니다.";
+			} else {
+				report = blackList.get(i).getReport_id();
+			}
+	%>		
+			<tr>
+				
+				<td><%=blackList.get(i).getReport_no() %></td>
+				<td><%=blackList.get(i).getMem_id() %></td>
+				<td><%=blackList.get(i).getMem_name() %></td>
+				<td><%=blackList.get(i).getMem_email() %></td>
+				<td><%=blackList.get(i).getList_reason() %></td>
+				<td><%=blackList.get(i).getList_date() %></td>
+				<td><%= report %></td>
+			</tr>
+		
+	<%	
+		}
+	%>	
+		
+	</table>
+	<br>
+	<input type="button" value="회원목록보기" id="memberList" class="button">
+</div>
+<footer>
+	<div class = "foo_div">
+		<span>(주)퍼피랑</span> <span>  |  </span>
+		<span>대표 : 백지열</span> <span>  |  </span>
+		<span>사업자등록번호 : 567-89-10112</span> <span>  |  </span>
+		<p>주소 : 대전 중구 계룡로 846 3층</p>
+	</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DHA Main Page</title>
+
+
+<%@ include file="/view/MypageView.jsp" %>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="../js/jquery.serializejson.min.js"></script>
+<script>
+$(function(){
+	$('.list').click(function(){
+		dogNo = $(this).attr('idx');
+		location.href=`<%=request.getContextPath()%>/selectDog.do?dog_no=${dogNo}&mem_id=<%=memberVo.getMem_id()%>`
+	})
+})
+</script>
+
+<style type="text/css">
+    body {
+        font-family: Arial, sans-serif;
+        
+        margin: 0;
+        
+    }
+
+   .dog {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        width: 300px; /* 각 카드의 너비를 고정 값으로 설정 */
+        height: 600px;
+        float: left;
+        margin-right: 20px;
+        display: flex; /* 내부 요소들을 수직으로 정렬하기 위해 flex 사용 */
+        flex-direction: column; /* 내부 요소들을 세로 방향으로 배치 */
+    }
+     .dog-content {
+        padding: 20px;
+    }
+
+    .dog h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .dog p {
+        font-size: 14px;
+    }
+
+    .dog img {
+        width: 100%;
+        border-radius: 8px;
+        margin-top: 10px;
+        height: 100%;
+    }
+     .profile {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<body >
+	<div class="profile">
+    <%
+		for(DogVO dogVo1 : dlist) {
+							
+			if(dogVo1 != null) {
+								
+	%>
+				
+				<!-- Project Card 1-->
+			   <div class="dog list" idx="<%=dogVo1.getDog_no() %>">
+			    <h2 class="fw-bolder"><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_name() %></h2>
+				    <p>
+				    	<label>생일 <%=dogVo1.getDog_birth() %></label><br>
+						<label>견종 <%=dogVo1.getDog_breed() %></label><br>
+						<label>성별 <%=dogVo1.getDog_gender() %></label><br>
+						<label>체급 <%=dogVo1.getDog_weight() %></label><br>
+				    </p>
+			                                     
+			   		<img class="img-fluid" src="<%=request.getContextPath() %>/images/dog/<%=dogVo1.getDog_img() %>" alt="..." />
+			    </div>
+			                            <!-- 반복문 여기까지 -->
+	<%			
+			} 
+		}
+	%>	
+	</div>                            
+						
+</body>
+</html>

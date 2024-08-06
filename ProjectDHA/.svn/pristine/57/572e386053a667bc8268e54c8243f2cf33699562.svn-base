@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+img{
+	width: 50%;
+	height: 50%;
+	margin: 0px auto;
+}
+
+#intro, .exp{
+	text-align: center;
+}
+
+h1, h2, h3, h4{
+	text-align : center;
+}
+
+#effect {
+    display: inline-block;
+    position: relative;
+}
+#effect:after {
+    position: absolute;
+    display: block;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 
+      inset 0 0 20px #fff /* 배경과 같은 색 */,
+      inset 0 0 20px #fff,
+      inset 0 0 20px #fff,
+      inset 0 0 20px #fff;
+}
+
+
+</style>
+
+
+
+</head>
+<body>
+
+
+
+<<<<<<< .mine
+<div id="effect">
+	<img  src="../images/intro/스크린샷(162).png" alt="스크린샷(162).png">
+</div>
+
+||||||| .r403604
+
+
+=======
+>>>>>>> .r404014
+<div id="intro">
+	<h2>DHA애견 호텔은 철저한 강아지 중심의 운영 방식으로 재방문율 95%를 유지합니다.</h2>
+	<h2>강아지의 관점에서 최선을 다하고 아이별 성향에 따른 맞춤형 관리를 진행합니다.</h2>
+	<br><br><br>
+	<h1>"저희 DHA애견 호텔은요"</h1>
+</div>
+
+<div id="explain">
+	<div class="exp">
+		<img src="../images/intro/1.png" alt="1.png">
+	</div>
+	<h2>1. 활동 및 케어 사진 전송</h2>
+	<h4>아이들의 자유시간 및 활동시간 사진을 다수 보내드립니다</h4>
+	
+	<div class="exp">
+		<img src="../images/intro/2.png" alt="2.png">
+	</div>
+	<h2>2. 아무 활동이나 하지 않습니다</h2>
+	<h4>전문가가 설계하여 다양한 감각을 활성화 시킬 수 있는 여러가지 프로그램을 운영, 개발합니다.</h4>
+	
+	<div class="exp">
+		<img src="../images/intro/3.png" alt="3.png">
+	</div>
+	<h2>3. 아무 선생님이나 채용하지 않습니다</h2>
+	<h4>애견인 & 전문 자격증을 보유한 선생님만 채용합니다</h4>
+	
+	<div class="exp">
+		<img src="../images/intro/4.png" alt="4.png">
+	</div>
+	<h2>4. 미용, 목욕 서비스</h2>
+	<h4>전문 자격증을 보유한 선생님이 관리해줍니다.</h4>
+	
+</div>
+
+
+
+</body>
+</html>

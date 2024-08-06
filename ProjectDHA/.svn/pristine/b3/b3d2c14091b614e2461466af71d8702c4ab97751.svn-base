@@ -1,0 +1,70 @@
+$.cartList = function(){
+	$.ajax({
+		url : `<%= request.getContextPath() %>/cart/getCartProd.do`,
+		type : "post",
+		dataType : "json",
+		success : function(result){
+			code = `<div class="sectionContainer">`;
+
+			$.each(result, function(i, v){
+				code += `<div class="cartProdContainer" id="${v.prod_no}">
+							<div class="cartProdThumbnail">
+								<img class="cartProdImg" src="${prodImgPath}/${v.prod_img}" alt="${v.prod_img}">
+							</div>
+							<div class="cartProdScript">
+								<div class="scriptSons"><p class="cartProdName">${v.prod_name}</p></div>
+								<div class="scriptSons"><input class="cartProdQty" type="number"></div>
+								<div class="scriptSons" price="${v.prod_price}"><p class="cartProdPrice"></div>
+							</div>
+						</div>
+						<div class="semi-hr"></div>`;
+			})		//	$.each() 종료
+				
+			code += `</div>`;
+			$('#section').html(code);
+		},
+		error : function(xhr){
+			if(xhr.status == 200){
+				code = `<div class="cartProd"><p id="noList">장바구니에 상품이 없습니다.</p></div>`;
+				$('#section').html(code);
+			} else {
+				alert("상태 : " + xhr.status);
+			}
+		}
+	});			//	장바구니에 품목 추가 종료
+}	//	cartList() 종료
+
+$.cartInfo = function(){
+	prodImgPath = "../images/prod";
+		
+	$.ajax({
+		url : `<%= request.getContextPath() %>/cart/getProdQty.do`,
+		type : "post",
+		dataType : 'json',
+		success : function(result){
+			console.log("result : ", result);
+			$.each(result, function(i, v){
+				//	상품 번호 가져오기
+				var prodId = "#" + v.prod_no;
+				console.log("v.prod_no : " + v.prod_no);
+				console.log("prodId : " + prodId);
+				
+				//	상품 가격 가져오기
+				var prodPrice = $("#"+v.prod_no).children("div").eq(1).children("div").eq(2).attr('price');
+				console.log("prodPrice : " + prodPrice);
+				
+				//	수량 값 적용
+				var prodPath = $(`${prodId} .cartProdQty`);
+	            prodPath.val(v.prod_qty);
+				
+				//	가격 계산 및 출력
+				var qtyPrice = (prodPrice * parseInt(v.prod_qty));
+				
+				$("#"+v.prod_no).children("div").eq(1).children("div").eq(2).children("p").html(26800 * v.prod_qty);
+			});
+		},
+		error : function(xhr){
+			alert("상태 : " + xhr.status);
+		}
+	})		//	장바구니에 상품 수량 및 가격 출력 완료
+}		//	cartInfo() 종료

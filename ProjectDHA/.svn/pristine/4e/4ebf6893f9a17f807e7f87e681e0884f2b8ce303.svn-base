@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="Room">
+	<select id="getRoom" parameterType="String" resultType="RoomVo">
+		select * from room where room_no = #{room_no}
+	</select>
+	
+	<select id="getRoomList" resultType="RoomVo">
+		select * from room order by room_no desc
+	</select>	
+	
+	<select id="chkRoomReserve" parameterType="map" resultType="RoomVo">
+		SELECT * FROM ROOM A
+ 		WHERE A.ROOM_NO NOT IN (SELECT B.ROOM_NO FROM RESERVE B
+                           		WHERE TO_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF')  <![CDATA[<]]>  RESERVE_OUT
+                             	AND TO_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF')  <![CDATA[>]]>  RESERVE_IN
+                             	and b.salon_no is null)
+		and a.room_type = #{room_type}
+		order by a.room_no asc
+	</select>
+		
+	<select id="getTimeBetweenInOut" parameterType="map" resultType="String">
+		select TO_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+        		- TO_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF')
+		from dual
+	</select>
+		
+</mapper>	
+
+
+
+
+
+
+
+
+

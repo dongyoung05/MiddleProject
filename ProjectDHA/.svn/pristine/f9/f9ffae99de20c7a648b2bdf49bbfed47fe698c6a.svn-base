@@ -1,0 +1,24 @@
+<%@page import="kr.or.ddit.vo.ProdCartVO"%>
+<%@page import="com.google.gson.GsonBuilder"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	//	Controller 에서 저장한 데이터 꺼내기
+	List<ProdCartVO> prodCartList = (List<ProdCartVO>)request.getAttribute("prodCartList");
+	
+	if(prodCartList.isEmpty()){
+		String result = null;
+		out.print(result);
+		out.flush();
+	} else {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		//	자바 객체(List) 를 Json 형식으로 변환 => 직렬화
+		String list = gson.toJson(prodCartList);
+	
+		out.print(list);
+		out.flush();
+	}
+%>

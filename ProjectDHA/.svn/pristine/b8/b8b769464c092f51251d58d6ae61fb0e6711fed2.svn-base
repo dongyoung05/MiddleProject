@@ -1,0 +1,68 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+  $(function(){
+	  
+ 
+  
+  $("#cancel").on('click', function(){
+	  location.href = "/board/board_main.jsp";
+  })
+  
+  $("#boardlist").on('click', function(){
+	  location.href = "/boardList.do";
+  })
+
+ })
+  
+  </script>
+</head>
+<body>
+<h2>게시글 수정하기</h2>
+	<form action="<%= request.getContextPath() %>/boardUpdate.do" method="post" enctype="multipart/form-data">
+	<table border="1">
+		<tr>
+			<td>제목</td>
+			<td><input type="text" id="board_title" name="board_title"></td>
+		</tr>
+		
+		<tr>
+			<td>분류</td>
+			<td>
+				<select id="board_ctgry_no" name="board_ctgry_no">
+					<option value="QUES">문의</option>
+					<option value="ALER">신고</option>
+					<option value="PROD">상품 리뷰</option>
+					<option value="HOTE">호텔 리뷰</option>
+					<option value="SALO">미용 리뷰</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>이미지</td>
+			<td><input type="file" id="board_img" name="board_img"></td>
+		</tr>
+		
+		<tr>
+			<td>내용</td>
+			<td><textarea rows="10" cols="40"  id="board_content" name="board_content"></textarea></td>
+		</tr>
+		
+		<tr>
+			<td style="text-align: center;" colspan="2">
+				<button type="submit">저장</button>
+				<input type="button" name="취소" value="취소" id="cancel">
+				<input type="button" name="게시글 목록"value="게시글 목록" id="boardlist">
+			</td>
+		</tr>
+			
+	</table>
+</form>
+</body>
+</html>

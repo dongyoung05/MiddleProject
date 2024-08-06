@@ -1,0 +1,64 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+    
+<%
+
+List<HashMap<String, Object>> newList = 
+	(List<HashMap<String, Object>>)request.getAttribute("newList");
+List<HashMap<String, Object>> oldList = 
+	(List<HashMap<String, Object>>)request.getAttribute("oldList");
+
+%>
+{
+	"new": 
+	{
+	<%
+	for(int i=0;i<newList.size();i++){
+		HashMap<String, Object> map = newList.get(i);
+		if(i>0) out.println(",");
+		%>
+		"no": "<%= map.get("reserve_no") %>",
+		"in": "<%= map.get("reserve_in") %>",
+		"out": "<%= map.get("reserve_out") %>",
+		"when": "<%= map.get("reserve_when") %>",
+		"price": "<%= map.get("reserve_price") %>",
+		"room": "<%= map.get("room_no") %>",
+		"salon": "<%= map.get("salon_no") %>",
+		"dogName": "<%= map.get("dog_name") %>"
+		<%
+	}
+	%>				
+	},
+	"old":
+	{
+	<%
+	for(int i=0;i<oldList.size();i++){
+		HashMap<String, Object> map = oldList.get(i);
+		if(i>0) out.println(",");
+		%>
+		"no": "<%= map.get("reserve_no") %>",
+		"in": "<%= map.get("reserve_in") %>",
+		"out": "<%= map.get("reserve_out") %>",
+		"when": "<%= map.get("reserve_when") %>",
+		"price": "<%= map.get("reserve_price") %>",
+		"room": "<%= map.get("room_no") %>",
+		"salon": "<%= map.get("salon_no") %>",
+		"dogName": "<%= map.get("dog_name") %>"
+		<%
+	}
+	%>				
+	}
+}
+
+
+
+
+
+
+
+
+
+

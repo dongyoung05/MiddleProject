@@ -1,0 +1,191 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<%@ include file="/view/MypageView.jsp" %>
+
+<style>
+.hr{
+	border: 1px solid black;
+	width: 300px;
+	height: 0px;
+	margin: 0 auto 50px auto;
+}
+
+h3{
+	text-align: center;
+}
+
+.listBox{
+	margin-top: 50px;
+}
+
+.listBox table{
+	margin: 0 auto;
+	width: 1000px;
+}
+
+table{
+	border-collapse: collapse;
+	border: 2px solid black;
+}
+
+td{
+	padding: 5px;
+}
+</style>
+
+<script>
+$(function(){
+	
+	$.getMyPayment('prod');
+	
+	$('select[name=type]').on('change', function(){
+		$.getMyPayment($(this).val());
+	})
+	
+	$(window).resize(function(){$.resize()});
+	
+})
+
+$.resize = function(){
+	size = $('#payment').height() + 200;
+	console.log(size);
+	$('#section').css('height', size);
+}
+
+$.getMyPayment = function(type){
+	$.getJSON(
+		"<%=request.getContextPath()%>/payment/myProdPayment.do",
+		{	
+			'memId' : '<%= memberVo.getMem_id()%>', 
+			'type' : type
+		},
+		function(res){
+			console.log("pay success");
+			
+			let code = "<table border='1'>";
+			
+			if(res.type == 'prod'){
+				
+				code += "<tr><th class='no'>주문번호</th>" + 
+				"<th>상품이름</th><th>가격</th><th>수량</th>" + 
+				"<th>금액 총합</th><th>날짜</th><th></th></tr>";
+
+				$.each(res.list, function(i, v){
+					code += "<tr class='tr' id='tr"+i+"'><td>"+ v.orderNo +"</td>"+
+					"<td>"+v.prodName+"</td>"+
+					"<td>"+v.prodPrice+"</td><td>"+v.qty+"</td>"+
+					"<td>"+v.price+"</td><td>"+v.date.substr(0, 16)+"</td>"+
+					"<td><button class='review'>리뷰</button></td></tr>";
+				})
+
+				code += "</table>";
+				$('#paytb').html(code);
+				$.makeSimple();
+				
+			} else{
+				code += "<tr><th class='no'>주문번호</th>" + 
+				"<th>서비스</th><th>반려견</th><th>IN/OUT</th>" + 
+				"<th>가격</th><th>날짜</th></tr>";
+				
+				$.each(res.list, function(i, v){
+					console.log(v.orderNo);
+					code += "<tr class='tr' id='tr"+i+"'><td>"+ v.orderNo +"</td>"+
+					"<td>"+v.service+"</td><td>"+v.dog+"</td>"+
+					"<td>"+v.sin.substr(0, 16)+" - " + v.sout.substr(0, 16)+"</td>"+
+					"<td>"+v.price+"</td><td>"+v.date+"</td></tr>";
+				})
+
+				code += "</table>";
+				$('#paytb').html(code);
+			}
+			$.resize();
+		}
+	)
+}
+
+$.makeSimple = function(){
+	
+	for(let i=1;i<$('.tr').length;i++){
+		temp = $('#tr'+(i-1)).find('td:eq(0)').text();
+		
+		let row = 1;
+		for(let j=i;j<$('tr').length;j++){
+			
+			if(temp == $('#tr'+j).find('td:eq(0)').text()){
+				row++;
+				$('#tr'+j).find('td:eq(6)').remove();
+				$('#tr'+j).find('td:eq(5)').remove();
+				$('#tr'+j).find('td:eq(4)').remove();
+				$('#tr'+j).find('td:eq(0)').remove();
+			} else {
+				$('#tr'+(i-1)).find('td:eq(0)').attr('rowspan', row);
+				$('#tr'+(i-1)).find('td:eq(4)').attr('rowspan', row);
+				$('#tr'+(i-1)).find('td:eq(5)').attr('rowspan', row);
+				$('#tr'+(i-1)).find('td:eq(6)').attr('rowspan', row);
+				i += j - i;
+				row = 1;
+				break;
+			}
+		}
+	}
+}
+
+</script>
+
+<body>
+
+<div id="section">
+	
+	<select name="type">
+		<option value="prod">==== 상품 ====</option>
+		<option value="service">==== 서비스 ====</option>
+	</select>
+	
+	<div id="payment" class="listBox">
+		<h3>결제 내역</h3>
+		<div class="hr" style="margin-bottom: 50px;"></div>
+		
+		<div id="paytb"></div>
+		
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer>
+	<div class = "foo_div">
+		<span>(주)퍼피랑</span> <span>  |  </span>
+		<span>대표 : 백지열</span> <span>  |  </span>
+		<span>사업자등록번호 : 567-89-10112</span> <span>  |  </span> <br>
+		<span>주소 : 대전 중구 계룡로 846 3층</span> <br>
+		<span>TEL : 042-222-8202 &nbsp&nbsp&nbsp&nbsp FAX : 042-222-8202</span> <br>
+		<span>MAIL : ddit@gmail.com</span>
+	</div>
+</footer>
+
+
+</body>
+</html>

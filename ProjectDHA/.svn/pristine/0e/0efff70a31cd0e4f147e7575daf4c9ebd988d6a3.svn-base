@@ -1,0 +1,437 @@
+<%@page import="kr.or.ddit.vo.AdminVO"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.ReplyVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.BoardVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+  <%@ page isELIgnored="true" %> 
+    
+  
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>																								
+  <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+  <script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>
+  <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 15px; /* 셀 안의 여백을 조금 늘렸습니다 */
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #808080;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* 이미지를 가운데 정렬하기 위해 추가했습니다 */
+            margin: 0 auto; /* 이미지를 가운데 정렬하기 위해 추가했습니다 */
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #update, #boardlist{
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #reply_button {
+            background-color: #045FB4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #delete {
+            background-color: #dc143c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .buttons input[type="button"]:last-child {
+            margin-right: 0;
+        }
+
+        #reply-container {
+            margin-top: 20px;
+        }
+
+        #reply-container .replyCreate {
+            margin-bottom: 20px;
+        }
+        #reply_content{
+        	width: 750px;
+        	height: 80px;
+        }
+    </style>
+  	<%
+  		//AdminVO adminVo = (AdminVO)session.getAttribute("adminVo"); 
+		BoardVO boardVo = (BoardVO)request.getAttribute("boardVo");
+  		String board_no = (String)request.getAttribute("board_no");
+  		AdminVO adminVo = (AdminVO)session.getAttribute("adminok");
+  		Gson gson = new Gson();
+  		  		
+  		String imgPath = "../images/board";
+  	%>
+  <script>
+
+  		adminId = "<%= adminVo.getAdmin_id() %>";
+  	$(function() {
+  		listReply();
+  		
+  		$('#update').on('click',  function() {
+  			location.href="<%=request.getContextPath()%>/boardDetail.do?board_no=<%= boardVo.getBoard_no()%>&trigger=Y";
+  		});
+  		
+  		$('#delete').on('click',  function() {
+  			if(!confirm("해당 게시물을 삭제하시겠습니까?")){
+  				location.href = "<%=request.getContextPath()%>/boardDetail.do?board_no=<%= boardVo.getBoard_no()%>";
+  			} else {
+  				alert("정상적으로 삭제되었습니다.")
+  				location.href = "<%= request.getContextPath()%>/boardDelete.do?board_no=<%=boardVo.getBoard_no()%>";
+  			}
+  		});
+  		
+  		
+  		$('#boardlist').on('click', function(){
+  			location.href = "<%= request.getContextPath()%>/printListAdmin.do?ctgry=QUES";
+  		})
+  		
+  		$('#reply_button').on('click', function(){
+  			var replyContent = $('#reply_content').val(); // 댓글 내용 가져오기
+  			if(replyContent.trim() === '') {//댓글 내용 공백여부 확인
+  				alert('댓글 내용을 입력해주세요.');
+  				return; // 댓글내용이 없으면 반환
+  			}
+  			
+  			
+  			  ff=  {
+					"reply_content" : replyContent,
+					"reply_writer" : $(".reply_writer").val(),
+					"board_no" : $(".board_no").val()
+			   }
+			   
+  			$.ajax({
+  				url: "<%=request.getContextPath()%>/replyInsert.do",
+  				type: "post",
+  				data: {
+  					"reply_content" : replyContent,
+  					"reply_writer" : $(".reply_writer").val(),
+  					"board_no" : $(".board_no").val()
+				},
+				success: function(data){
+					// alert("댓글이 등록되었습니다.")  
+					listReply();
+  			    },
+  				error: function(xhr){
+  					alert("상태: "+xhr.status)
+  				},
+  				dataType: 'json'
+  				});
+			});
+
+  		  listReply  = function() {
+  			$.ajax ({
+  				url: "<%=request.getContextPath()%>/replyList.do",
+  				type: "get",
+  				data: {"board_no" : <%=boardVo.getBoard_no()%> },
+  				success: function(result){
+  					alert("댓글목록을 불러옵니다.")
+  					 code = "";
+  					$.each(result, function(i,v){
+  						reply_content = v.reply_content; //엔터만 포함해줌
+  						reply_content = reply_content.replaceAll(/\n/g,"<br>");
+  						
+  						code += `<div class="reply-body">
+  									<div class="body">
+  										<p class="reply-p1">
+  										작성자:<span class="writer">${v.reply_writer}</span> &nbsp;
+  										날짜: <span class="date">${v.reply_date}</span>
+  										</p>
+  										<p class="reply-p2">`;
+  						if(adminVo!=null){
+  						code +=				`<input idx="${v.reply_no}" type="button" value="댓글수정" name="reply_update" class="action">`;	
+  						code +=				`<input idx="${v.reply_no}" type="button" value="댓글삭제" name="reply_update" class="action">`;
+  										};
+  						code += 		`</p>
+  									</div>
+  										<p class="reply-p3">
+  											${reply_content}
+  										</p>
+  								</div>`;		
+  								
+  								
+  							
+  							
+  						})//$.each		 
+  					$('.datview').append(code);	
+  					
+  				},
+  				error: function(xhr){
+  					alert("상태: "+xhr.status)
+  				},
+  				dataType: 'json'
+  			});
+  		}	
+
+  		  $.listReply = function() {
+  			$.ajax ({
+  				url: "<%=request.getContextPath()%>/replyList.do",
+  				type: "get",
+  				data: {"board_no" : <%=boardVo.getBoard_no()%> },
+  				success: function(result){
+  					alert("댓글목록을 불러옵니다.")
+  					 code = "";
+  					$.each(result, function(i,v){
+  						reply_content = v.reply_content; //엔터만 포함해줌
+  						reply_content = reply_content.replaceAll(/\n/g,"<br>");
+  						
+  						code += `<div class="reply-body">
+  									<div class="body">
+  										<p class="reply-p1">
+  										작성자:<span class="writer">${v.reply_writer}</span> &nbsp;
+  										날짜: <span class="date">${v.reply_date}</span>
+  										</p>
+  										<p class="reply-p2">`;
+  						
+  						code +=				`<input idx="${v.reply_no}" type="button" value="댓글수정" name="reply_update" class="action">`;	
+  						code +=				`<input idx="${v.reply_no}" type="button" value="댓글삭제" name="reply_update" class="action">`;
+  										
+  						code += 		`</p>
+  									</div>
+  										<p class="reply-p3">
+  											${reply_content}
+  										</p>
+  								</div>`;		
+  								
+  								
+  							
+  							
+  						})//$.each		 
+  					$('.datview').append(code);	
+  					
+  				},
+  				error: function(xhr){
+  					alert("상태: "+xhr.status)
+  				},
+  				dataType: 'json'
+  			});
+  		}
+  		
+  	})//function
+  	
+  	
+  	
+  	 listReply = function() {
+
+			$.ajax ({
+				url: "<%=request.getContextPath()%>/replyList.do",
+				type: "get",
+				data: {"board_no" : "<%=boardVo.getBoard_no()%>"},
+				success: function(result){
+					//alert("댓글목록을 불러옵니다.")
+					 code = "";
+					
+					$.each(result, function(i,v){
+						reply_content = v.reply_content; //엔터만 포함해줌
+						reply_content = reply_content.replaceAll(/\n/g,"<br>");
+						
+						code += `<div class="reply-body">
+									<table class="body">
+									
+										<tr class="reply-p1">
+										
+											<td>
+												<span class="writer">${v.reply_writer}</span> &nbsp;&nbsp;&nbsp;
+											</td>
+											
+											<td>
+												작성일: <span class="date">${v.reply_date}</span>
+											</td>
+											
+										</tr>
+										
+										<tr class="reply-p2">
+											<td colspan="4">
+												${reply_content}
+											</td>	
+										</tr>
+										
+										
+									</table>`;
+						
+						code +=		` <p class="reply-p3" style="text-align:center; ">
+											<input idx="${v.reply_no}" type="button"  value="답변수정" name="reply_update" class="action"
+												        style= "background-color: #045FB4;
+										            	color: #fff;
+									            		border: none;
+									            		padding: 10px 20px;
+									            		cursor: pointer;
+									            		border-radius: 5px;
+									            		margin-right: 10px;"
+											>`;	
+						code +=				`<input idx="${v.reply_no}" type="button"  value="답변삭제" name="reply_update" class="action"
+														style= "background-color: #dc143c;
+										            	color: #fff;
+									            		border: none;
+									            		padding: 10px 20px;
+									            		cursor: pointer;
+									            		border-radius: 5px;
+									            		margin-right: 10px;"
+											>
+									</p>`	
+						
+						code += `</div>`;		
+						})//$.each	
+						
+					$('.datView').empty().append(code);	
+					
+				},
+				error: function(xhr){
+					alert("상태: "+xhr.status)
+				},
+				dataType: 'json'
+			});
+		}	
+		
+  </script>
+</head>
+
+<body>
+<div class="container">
+    <table>
+        <tr>
+            <th>제목</th>
+            <td colspan="3"><%=boardVo.getBoard_title()%></td>
+        </tr>
+        
+        <tr>
+            <th>작성자</th>
+            <td colspan="3"><%=boardVo.getMem_id()%></td>
+        </tr>
+        
+        <tr>
+            <th>작성일자</th>
+            <td><%=boardVo.getBoard_date()%></td>
+            <th>조회수</th>
+            <td><%=boardVo.getBoard_views()%></td>
+        </tr>
+        
+        <!-- <tr>
+            <th colspan="2">이미지</th>
+        </tr> -->
+        <tr>
+            <td colspan="4">
+                <img id="board_img" src="<%= request.getContextPath() %>/boardImageView?board_no=<%= boardVo.getBoard_no() %>">
+            </td>
+        </tr>
+        
+       <!--  <tr>
+            <th colspan="2">본문</th>
+        </tr> -->
+        <tr>
+            <td colspan="4" style="text-align: center;"><%=boardVo.getBoard_content()%></td>
+        </tr>
+     	<tr>   
+		    <td class="buttons" colspan="4" >
+		        <input type="button" id="update" value="수정" >
+		        <input type="button" id="delete" value="삭제" >
+		        <input type="button" id="boardlist" value="게시글목록">
+		    </td>
+		</tr>    
+    </table>
+    
+    
+    <% if(adminVo!=null) {%>
+    <div class="container">
+    	<h2>문의 답변하기</h2>
+    	<div class="replyInsert">
+    		<input type="hidden" class="board_no" name="board_no" value="<%= boardVo.getBoard_no()%>">
+    		<input type="hidden" class="reply_writer" name="reply_writer" value="<%=adminVo.getAdmin_id()%>">
+    		<div style="margin-top: 10px;">
+    		<textarea id="reply_content" name="reply_content"></textarea>
+    		<button id="reply_button">답변등록</button>
+    		</div>
+     	</div>
+    </div>
+    <% } %>
+    
+    <div class="container">
+    	<div class="replyView">
+    		<h2 style="padding: 10px 0 15px 0; border-bottom: 1px solid gray;">문의에 대한 답변</h2>
+    		<div class="datView" >
+	    		
+    		</div>
+    	</div>
+    </div>
+
+
+  
+
+
+    <!-- <div id="reply-container">
+        <div class="replyCreate">
+            <textarea id="insertContent" rows="5" cols="40"></textarea>
+            <input type="button" id="replyInsert" value="등록">
+            <input type="button" id="replyCancel" value="취소">
+        </div>
+        <hr>
+        <div id="replyList"></div>
+    </div> -->
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+package kr.or.ddit.controller.dog;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import kr.or.ddit.service.dog.DogServiceImpl;
+import kr.or.ddit.service.dog.IDogService;
+import kr.or.ddit.vo.DogVO;
+
+/**
+ * Servlet implementation class DogUpdate
+ */
+@WebServlet("/dogUpdate.do")
+public class DogUpdate extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		
+		int dog_no = Integer.parseInt(request.getParameter("dog_no"));
+		
+		DogVO paramvo = new DogVO();
+		
+		try {
+			BeanUtils.populate(paramvo, request.getParameterMap());
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		paramvo.setDog_no(dog_no);
+		
+		IDogService service = DogServiceImpl.getInstance();
+		
+		int cnt = service.updateDog(paramvo);
+		String alert = "";
+		if(cnt > 0) {
+			alert = "등록 성공~";
+			request.setAttribute("alert", alert);
+			response.sendRedirect("/dog/mypageDogSelect.jsp");
+		} else {
+			alert = "등록 실패";
+			request.setAttribute("alert", alert);
+			request.getRequestDispatcher("/dog/dogUpdate.jsp").forward(request, response);
+		}
+	}
+
+}

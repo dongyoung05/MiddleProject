@@ -1,0 +1,85 @@
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<%
+List<NoticeVO> noticeList = (List<NoticeVO>)request.getAttribute("noticeList");
+%>
+
+<%@ include file="../view/adminView.jsp" %>	
+</head>
+<body>
+<style>
+	table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        background-color: #808080;
+        color: #fff;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    #noticeInsert {
+    	background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container">
+		<input type="button"  value="공지 등록" id="noticeInsert" onClick="location.href='<%=request.getContextPath()%>/notice/noticeInsert.jsp'"> 
+		<table border="1" class="table table-hover">
+	
+
+		<tr>
+			<th>공지번호</th>
+			<th>제목</th>
+			<th>작성일자</th>
+			
+		</tr>	
+		
+		<%if(noticeList!=null){ %>
+<%
+			for(NoticeVO notice : noticeList) {
+%>
+		<tr>
+			<td> <%= notice.getNotice_no()%>   </td>
+			<td> <a href="<%=request.getContextPath()%>/noticeDetailAdmin.do?notice_no=<%= notice.getNotice_no()%>"> <%= notice.getNotice_title()%> </a></td>
+			<td><%= notice.getNotice_date() %></td>
+		</tr>	
+<%
+		}
+	}else{%>
+		<tr>
+		<td>등록된 공지사항이 없습니다.</td>
+		<td>등록된 공지사항이 없습니다.</td>
+		<td>등록된 공지사항이 없습니다.</td></tr>
+	<% }%>
+	</table>
+</div>
+
+	
+</body>
+</html>

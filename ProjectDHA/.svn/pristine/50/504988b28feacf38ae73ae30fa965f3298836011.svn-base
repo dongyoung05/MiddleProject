@@ -1,0 +1,37 @@
+package kr.or.ddit.controller.board;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.service.board.IBoardService;
+
+/**
+ * Servlet implementation class BoardDelete
+ */
+@WebServlet("/boardDelete.do")
+public class BoardDelete extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+   
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String board_no = request.getParameter("board_no");
+		
+		IBoardService service = BoardServiceImpl.getInstance();
+		
+		int cnt = service.deleteBoard(board_no);
+		
+		if(cnt>0) {
+			System.out.println("게시글이 성공적으로 삭제되었습니다.");
+		}
+		request.setCharacterEncoding("utf-8");
+		request.getRequestDispatcher("/board/boardList.jsp").forward(request, response);
+	}
+
+	
+	
+
+}

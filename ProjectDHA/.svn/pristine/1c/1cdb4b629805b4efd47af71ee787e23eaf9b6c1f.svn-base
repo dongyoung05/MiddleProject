@@ -1,0 +1,38 @@
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DHA Main Page</title>
+
+<%@ include file="/view/MypageView.jsp" %>
+
+<body>
+	<h1><%=memberVo.getMem_name() %>님의 Mypage Dog</h1>
+	
+	<%
+		for(DogVO dogVo1 : dlist) {
+	%>	
+		<div>
+			<label class="dogNo" style="display: none;"><%=dogVo1.getDog_no() %></label><hr>
+			<label class="dogName">
+				<a href="<%=request.getContextPath()%>/selectDog.do?mem_id=<%=memberVo.getMem_id()%>&dog_no=<%=dogVo1.getDog_no()%>"><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_name() %>
+			</a></label><hr>
+			<label><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_birth() %></label><hr>
+			<label><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_breed() %></label><hr>
+			<label><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_gender() %></label><hr>
+			<label><%=memberVo.getMem_name() %>님의 <%=dogVo1.getDog_weight() %></label><hr>
+			
+			<br>	
+		</div>
+	<% 		
+		}
+	%>
+
+
+</body>
+</html>

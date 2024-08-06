@@ -1,0 +1,123 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="../js/jquery.serializejson.min.js"></script>
+<%@ include file="/view/MypageView.jsp" %>
+<title>Insert title here</title>
+<style>
+ 
+
+    #ff {
+        max-width: 400px;
+        margin: 100px auto; /* 화면 중앙 정렬 */
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #ff input[type="text"],
+    #ff input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    #ff input[type="button"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #ff input[type="button"]:hover {
+        background-color: #45a049;
+    }
+     #ff input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+	  #ff input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    #ff select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    #ff input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    #section{
+    	text-align: left;
+    }
+</style>
+</head>
+<body>
+
+	
+	<div id="section">
+		<form  id="ff" action="/ProjectDHA/dogInsert.do?mem_id=<%=memberVo.getMem_id() %>" method="post" enctype="multipart/form-data"  >
+		    <h1 style="text-align: center;">반려견 정보 등록</h1>
+			
+			<label></label><input type="text" placeholder="반려견 이름을 입력하세요" name="dog_name"><br>
+			<label></label><input type="text" placeholder="반려견 종을 입력하세요" name="dog_breed"><br>
+			<label>성별 </label> <select name = "dog_gender">
+								    <option>남</option>
+								    <option>여</option>
+								
+			  				</select><br>
+			<label>생일 </label> <input type="date" placeholder="반려견 생일을 입력하세요" name="dog_birth"><br>
+			<label>체급 </label> <select name = "dog_weight">
+										<option>소형</option>
+								    	<option>중형</option>
+								    	<option>대형</option>
+			                  </select><br><br>
+			<label>이미지</label> <input type="file" name="dog_img"><br>
+			<br>
+			<input type='submit' value='등록' >
+			
+		
+		</form>
+	</div>
+
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+</body>
+</html>

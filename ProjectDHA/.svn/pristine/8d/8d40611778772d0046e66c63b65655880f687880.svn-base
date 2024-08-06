@@ -1,0 +1,488 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+
+<style>
+table{
+	border-collapse: collapse;
+	border: 2px solid black;
+}
+
+td{
+	padding: 5px;
+}
+tr{
+	text-align: center;
+}
+
+th{
+	width: 800px;
+	height: 80px;
+}
+
+.memSpan{
+	display: inline-block; 
+	width: 120px;
+	text-align: center;
+	margin-right: 100px; 
+}
+
+.restd{
+	width: 100px;
+	height: 30px;
+}
+
+.reserve{
+	width: 100px;
+}
+
+.reserve:hover{
+	color: blue;
+}
+
+.hr{
+	border: 1px solid black;
+	width: 300px;
+	height: 0px;
+	margin: 0 auto 50px auto;
+}
+
+#loginYes, #loginNo{
+	width: 50%;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#profileImg{
+	width: 400px;
+	height: 400px;
+}
+
+#MemInfo{
+	text-align: left;
+	margin-bottom: 100px;
+}
+
+#MemInfo h4{
+	border-bottom: 1px solid black;
+	padding: 5px;
+}
+
+#roomList{
+	text-align: center;
+}
+
+#chooseDate{
+	text-align: center;
+}
+
+#chooseDate table{
+	margin: 0 auto;
+}
+
+.dogProfile{
+	display: flex;
+	margin-bottom: 50px;
+}
+
+.dogImg{
+	width: 180px;
+	height: 180px;
+	border-radius: 50%;
+	margin-right: 50px;
+}
+
+.dogImg:hover{
+	border: 2px solid red; 
+}
+
+.dogInfo{
+	text-align: left;
+}
+
+.dogId{
+	display: none;
+}
+
+.room{
+	height: 40px;
+}
+</style>
+
+<%
+// 여기는 Session 객체로 로그인 정보 받아올 곳
+// 로그인 정보가 있냐 없냐에 따라 명함에 버튼, 프로필, 인삿말 변경되야함
+
+String imgPath = request.getContextPath() + "/images";
+
+MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+List<DogVO> myDogList = (List<DogVO>)session.getAttribute("myDogList");
+
+
+
+%>
+
+<script>
+$(function(){
+	
+	$.resize();
+	
+	var today = new Date();
+	$('input[type=date]').attr('min', today.toISOString().substr(0, 10));
+	
+	weight = "";
+	dogNo = "";
+	dogName = "";
+	roomNo = "";
+	// 시작 날짜, 주야간(1, 2)
+	sdate = "";
+	stime = "";
+	// 끝 날짜, 주야간	
+	edate = "";
+	etime = "";
+	// 예약 성공후 예약 번호
+	reserveNo = "";
+	
+	$('#sdate').on('change', function(){
+		$.setTimeDate();
+		$.printDateTime();
+		$.chkRoom();
+		$.resize();
+	})
+	
+	$('select').on('change', function(){
+		$.setTimeDate();
+		$.printDateTime();
+		$.chkRoom();
+		$.resize();
+	})
+	
+	$('#edate').on('change', function(){
+		$.setTimeDate();
+		$.printDateTime();
+		$.chkRoom();
+		$.resize();
+	})
+	
+	// 반려견 선택
+	$('.dogProfile').on('click', function(){
+		$('.dogImg').css('border', 'none');
+		$(this).find('.dogImg').css('border', '5px solid red');
+		weight = $(this).find('.weight').text();
+		dogNo = $(this).find('.dogId').text();
+		dogName = $(this).find('.dogName').text();
+		console.log(weight + "," + dogNo);
+		
+		$.chkRoom();
+		$.resize();
+	})
+	
+	// 예약 가능한 객실 조회 (강아지 무게, 날짜, 시간 필요)
+	$.chkRoom = function(){
+		
+		if(weight != "" && sdate != "" && edate != ""){
+			$.getJSON(
+				"<%=request.getContextPath()%>/room/checkRoom.do",
+				{
+					'weight' : weight, 
+					'sdate' : sdate,
+					'edate' : edate,
+					'stime' : stime,
+					'etime' : etime
+				},
+				function(res){
+					$('.room').remove();
+					
+					let code = "<tr class='room' style='font-weight:bold;'><td>번호</td>" +
+							"<td>이름</td>" +
+							"<td>설명</td>" +
+							"<td>가격(원)</td>" +
+							"<td></td></tr>";
+					
+					$.each(res, function(i, v){
+						code += "<tr class='room'><td class='no'>" + v.no + "</td>" +
+								"<td class='title'>" + v.title + "</td>" +
+								"<td class='desc'>" + v.desc + "</td>" +
+								"<td class='price'>" + v.price + "</td>" +
+								"<td class='reserve'>예약하기</td></tr>"
+					})
+					
+					$('table').append(code);
+					$.resize();
+				}
+			)
+		}
+	}
+	
+	// 예약하기를 눌렀을 때 예약하기
+	$(document).on('click', '.reserve', function(){
+		price = $(this).prev().text();
+		no = $(this).parent().find('.no').text();
+		console.log(price + "  " + no);
+		
+		$.getJSON(
+			"<%=request.getContextPath()%>/reserve/roomReserve.do",
+			{
+				'sdate' : sdate,
+				'edate' : edate,
+				'stime' : stime,
+				'etime' : etime,
+				'price'	: price,
+				'no' : no,
+				'dogNo' : dogNo,
+				'memId' : '<%= memberVo.getMem_id()%>'
+			},
+			function(res){
+				
+				if(res.flag == '성공'){
+					reserveNo = res.no;
+					console.log(reserveNo);
+					
+					$('#mmemName', parent.document).text('<%= memberVo.getMem_name()%>');
+					$('#mmemId', parent.document).text('<%= memberVo.getMem_id()%>');
+					$('#mmemMail', parent.document).text('<%= memberVo.getMem_email()%>');
+					$('#mdogName', parent.document).text(dogName);
+					$('#mweight', parent.document).text(weight);
+					
+					console.log("stime :" + stime);
+					console.log("etime :" + etime);
+					if(stime == "1") $('#min', parent.document).text(sdate + " 10:00");
+					else $('#min', parent.document).text(sdate + " 18:00");
+					if(etime == "1") $('#mout', parent.document).text(edate + " 09:59");
+					else $('#mout', parent.document).text(edate + " 17:59");
+					
+					$('#mprice', parent.document).text(price);
+					$.showModal();
+				} 
+			}
+		)
+	})
+	
+	// 테이블에 선택한 날짜, 시간 출력  
+	$.printDateTime = function(){
+		$.getTimeDate();
+		if(sdate != "" && edate != ""){
+			// stime, etime 텍스트변수
+			tstime = $('select[name=stime] option:selected').text();
+			tetime = $('select[name=etime] option:selected').text();
+			$('#datetime').html(sdate + " " + tstime + " ~ " + edate + " " + tetime
+								+ "<br>예약 가능한 날짜를 조회합니다.");
+		}
+	}
+	
+	// 선택된 날짜, 시간 가져오기
+	$.getTimeDate = function(){
+		sdate = $('#sdate').val();
+		stime = $('select[name=stime] option:selected').val();
+		edate = $('#edate').val();
+		etime = $('select[name=etime] option:selected').val();
+	}
+	
+	// 날짜 오류 안나게 설정하기
+	$.setTimeDate = function(){
+		$.getTimeDate();
+		let tempsdate = new Date(sdate);
+		let tempedate = new Date(edate);
+		
+		$('select[name=etime] option').prop('disabled', false);
+		$('#edate').attr('min', tempsdate.toISOString().substr(0, 10));
+		
+		if(sdate == edate && stime == '1'){
+			$('select[name=etime] option[value=2]').prop('selected', true);
+			$('select[name=etime] option[value=1]').prop('disabled', true);
+		} else if((sdate == edate || tempsdate > tempedate) && stime == '2'){
+			tempsdate.setDate(tempsdate.getDate() + 1);
+			$('#edate').val(tempsdate.toISOString().substr(0, 10));
+			$('#edate').attr('min', tempsdate.toISOString().substr(0, 10));	
+		} else if(tempsdate > tempedate && stime == '1'){
+			$('#edate').val(tempsdate.toISOString().substr(0, 10));
+			$('#edate').attr('min', tempsdate.toISOString().substr(0, 10));
+			$('select[name=etime] option[value=2]').prop('selected', true);
+			$('select[name=etime] option[value=1]').prop('disabled', true);
+		}
+		$.getTimeDate();
+	}
+	
+	$('body', parent.document).css('margin', '0');
+	
+	// 예약 내역 확인 Modal창 띄우기
+	$.showModal = function(){
+		console.log('show');
+		$('#m1', parent.document).fadeIn(200);
+	}
+	
+	$.closeModal = function(){
+		console.log('close');
+		$('#m1', parent.document).fadeOut(200);
+	}
+	
+	$('#cancel', parent.document).on('click', function(){
+		
+		$.getJSON(
+			"<%=request.getContextPath()%>/reserve/cancelReserve.do",
+			{'reserveNo' : reserveNo},
+			function(res){
+				if(res.flag = '성공'){
+					alert('예약이 취소 되었습니다.');
+				}
+			}
+		)
+		
+		$.closeModal();
+	})
+	
+	$('#pay', parent.document).on('click', function(){
+		
+		$.getJSON(
+			"<%=request.getContextPath()%>/payment/payReserve.do",
+			{'reserveNo' : reserveNo, 'price' : price},
+			function(res){
+				if(res.flag1 == '성공' && res.flag2 == '성공'){
+					alert('결제가 완료되었습니다.');
+				}
+			}
+		)
+		
+		$.closeModal();
+	})
+	
+	$(window).resize(function(){$.resize()});
+})
+
+$.resize = function(){
+	size = $('body').height() + 250;
+	console.log(size);
+	$('#section', parent.document).css('height', size);
+}
+
+</script>
+
+</head>
+<body>
+
+
+
+
+<%
+if(memberVo != null){
+%>
+<div id="loginYes">
+	
+	<h3>예약자 프로필</h3>
+	<div class="hr" style="margin-bottom: 50px;"></div>
+	
+	<img id="profileImg" src="<%= imgPath %>/member/<%=memberVo.getMem_img() %>" alt="<%=memberVo.getMem_img() %>">
+	
+	<div id="MemInfo">
+		
+		<h4><span class="memSpan">이름</span> <%= memberVo.getMem_name() %></h4>
+		<h4><span class="memSpan">ID</span> <%= memberVo.getMem_id() %></h4>
+		<h4><span class="memSpan">EMAIL</span> <%= memberVo.getMem_email() %></h4>
+	
+	</div>
+	
+	<h3>반려견 프로필</h3>
+	<div class="hr" style="margin-bottom: 50px;"></div>
+	
+	<%
+	if(myDogList == null){
+	%>
+		<h3>마이페이지에서 반려견을 등록해주세요.</h3>
+	<%	
+	} else{
+	%>
+		<h3>객실을 이용할 반려견을 선택해주세요.</h3>
+		<%
+		for(int i=0;i<myDogList.size();i++){
+			DogVO dog = myDogList.get(i);
+		%>
+		<div class="dogProfile">
+			<img class="dogImg" id="dogImg<%=i+1%> %>" src="<%= imgPath %>/dog/<%=dog.getDog_img() %>" 
+				alt="<%=dog.getDog_img() %>">
+			<div class="dogInfo">
+				<h4 class="dogName"><%=dog.getDog_name() %></h4>
+				<h4 class="dogId"><%=dog.getDog_no() %></h4>
+				<h4><%=dog.getDog_birth() %></h4>
+				<h4><%=dog.getDog_breed() %></h4>
+				<h4 class="weight"><%=dog.getDog_weight() %></h4>
+			</div>	
+		</div>
+		<% 	
+		}
+		%>
+	<%
+	}
+	%>
+</div>
+<%
+} else{
+%>
+<div id="loginNo">
+	<h3>로그인이 필요한 기능입니다.</h3>
+	<div class="hr" style="margin-bottom: 50px;"></div>
+</div>	
+<%	
+}
+%>
+
+
+
+<div id="chooseDate">
+	<h3>날짜 선택</h3>
+	<div class="hr" style="margin-bottom: 50px;"></div>
+	
+	<input type="date" name="date" id="sdate">
+	<select name="stime">
+		<option value="1">10:00 부터</option>
+		<option value="2">18:00 부터</option>
+	</select>
+	~
+	<input type="date" name="date" id="edate">
+	<select name="etime">
+		<option value="1">10:00 까지</option>
+		<option value="2">18:00 까지</option>
+	</select>
+
+	<table border="1">
+		<tr>
+			<th colspan="5" id="datetime">날짜를 선택하세요.</th>
+		</tr>
+	</table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

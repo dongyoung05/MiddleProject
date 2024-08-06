@@ -1,0 +1,62 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.List"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Sale</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script>
+	$(function(){
+		$.ajax({
+			url : `<%= request.getContextPath() %>/prod/getAllProd.do`,
+			type : 'post',
+			dataType : 'json',
+			success : function(result){
+				code ="";
+				$.each(result, function(i,v){
+					code += `<tr>
+								<td class="prodNo"> ${v.prod_no} </td>
+								<td class="prodName"> ${v.prod_name} </td>
+								<td class="prodDesc"> ${v.prod_desc} </td>
+								<td><input type="button" value="삭제" class="delete" idx="${v.prod_no}"></td>
+							</tr>`;
+				})		//	each문 종료
+				
+				$('#prod').append(code);
+			}
+		})	//	리스트 출력 종료
+		
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		$('.delete').on('click', function(){
+			location.href = `<%= request.getContextPath() %>"/prod/deleteProd.do?idx=${idx}`;
+		})
+	})
+	
+	
+</script>
+</head>
+<body>
+
+<h3>Prod Sale</h3>
+	<table border="1" id="prod">
+		<tr>
+			<td colspan="4">
+				<input type="button" value="등록" id="insertProd" style="float:right">
+			</td>
+		</tr>
+		<tr>
+			<th><h4>ID</h4></th>
+			<th><h4>제목</h4></th>
+			<th><h4>내용</h4></th>
+			<th><h4>버튼</h4></th>
+		</tr>
+	</table>
+</body>
+</html>

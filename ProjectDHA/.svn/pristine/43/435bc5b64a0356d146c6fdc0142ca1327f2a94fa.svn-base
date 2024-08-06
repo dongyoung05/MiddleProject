@@ -1,0 +1,27 @@
+package kr.or.ddit.service.prodcart;
+
+import kr.or.ddit.dao.prodcart.IProdCartDao;
+import kr.or.ddit.dao.prodcart.ProdCartDaoImpl;
+import kr.or.ddit.vo.ProdCartVO;
+
+public class ProdCartServiceImpl implements IProdCartService {
+	
+	private static ProdCartServiceImpl service;
+	
+	private IProdCartDao dao;
+	
+	private ProdCartServiceImpl() {
+		dao = ProdCartDaoImpl.getInstance();
+	}
+	
+	public static ProdCartServiceImpl getInstance() {
+		if(service == null) service = new ProdCartServiceImpl();
+		return service;
+	}
+
+	@Override
+	public int insertProdCart(ProdCartVO prodCart) {
+		return dao.insertProdCart(prodCart);
+	}
+
+}

@@ -1,0 +1,147 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Admin</title>
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>	
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/MainPage.css">
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/중분류페이지공통스타일.css">
+<script>
+	$(function(){
+		$.resize = function(){
+			size = $('.table').height() + 200;
+			console.log(size);
+			$('#section').css('height', size);
+		}
+		$.resize();
+		$(window).resize(function(){$.resize()});
+		
+		//	상품 등록 버튼
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		//	페이지 클릭 번호
+		$('.page').on('click', function(){
+			pageNum = $(this).text();
+			pageUrl = "<%= request.getContextPath() %>/pageProdAdmin.do";
+			pageUrl += "?page=" + pageNum;
+			location.href = pageUrl;
+		})
+	})
+</script>
+<style>
+	table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        background-color: #808080;
+        color: #fff;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+  
+	.button {
+		display: inline-block;
+		padding: 10px 20px;
+		background-color: #422700;
+		color: white;
+		text-decoration: none;
+		border-radius: 5px;
+		transition: background-color 0.3s;
+	}
+	#pages {
+		text-align : center;
+	}
+	#pages span{
+		margin-right : 10px;
+	}
+	#pages span:hover {
+		font-weight : bold;
+	}
+</style>
+</head>
+<%
+List<ProdVO> prodList = (List<ProdVO>)request.getAttribute("prodList");
+%>
+<body>
+<%@ include file="../admin/view/AdminView.jsp" %>
+	<div id="title">
+		<h2>상품 관리</h2>
+	</div>
+	<div id="section">
+		<table border="1" class="table">
+		<tr>
+			<th>상품분류</th>
+			<th>상품번호</th>
+			<th>상품명</th>
+			<th>가격</th>
+			<th>등록일자</th>
+			<th>체급분류</th>
+		</tr>	
+		<%if(prodList != null){ %>
+<%
+			for(ProdVO prod : prodList) {				
+%>
+		<tr id="<%= prod.getProd_no()%>">
+			<td> <%= prod.getProd_ctgry_id()%> </td>
+			<td> <%= prod.getProd_no() %>      </td>
+			<td> <%= prod.getProd_name() %>    </td>
+			<td> <%= prod.getProd_price() %>   </td>
+			<td> <%= prod.getProd_date() %>    </td>
+			<td> <%= prod.getProd_weight()%>   </td>
+		</tr>
+<%
+			}
+		} else{%>
+			<tr>
+				<td colspan="6">등록된 상품이 없습니다.</td>
+			</tr>
+	<%	}	%>
+		<tr>
+			<td id="pages" colspan="6">
+				<span class="page">1</span>
+				<span class="page">2</span>
+				<span class="page">3</span>
+				<span class="page">4</span>
+				<span class="page">5</span>
+				<span class="page">6</span>
+				<span class="page">7</span>
+				<span class="page">8</span>
+				<span class="page">9</span>
+				<span class="page">10</span>
+			</td>
+		</tr>
+		</table>
+		<br>
+		<input type="button" value="상품 등록" id="insertProd" class="button">
+	</div>
+
+	<footer>
+		<div class = "foo_div">
+			<span>(주)퍼피랑</span> <span>  |  </span>
+			<span>대표 : 백지열</span> <span>  |  </span>
+			<span>사업자등록번호 : 567-89-10112</span> <span>  |  </span>
+			<p>주소 : 대전 중구 계룡로 846 3층</p>
+		</div>
+	</footer>
+</body>
+</html>

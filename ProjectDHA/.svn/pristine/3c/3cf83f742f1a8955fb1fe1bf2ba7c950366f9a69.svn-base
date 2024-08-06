@@ -1,0 +1,21 @@
+package kr.or.ddit.service.reserve;
+
+import java.util.List;
+
+import kr.or.ddit.vo.ReserveVO;
+
+public interface IReserveService {
+	
+	/**
+	 * 예약 테이블 모든 레코드 반환한다.
+	 * @return
+	 */
+	public List<ReserveVO> getReserveList();
+	
+	
+	/**
+	 * 예약 테이블 중 미용서비스가 포함된 예약만 반환한다. (호텔 중 미용 서비스 포함)
+	 * @return
+	 */
+	public List<ReserveVO> getSalonReserveList();
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="board">
+	
+	<select id="boardPrintAll" resultType="BoardVo">
+		select * from board
+	</select>
+	
+	<insert id="insertBoard" parameterType="BoardVo">
+		insert into board (board_no, board_title, board_content, board_date,
+						   board_img,  mem_id, order_no, board_ctgry_no)
+		values (#{board_ctgry_no} + FORMAT${board_ctgry_no}_seq.nextval, '000000'), #{board_title}, #{board_content}, sysdate,
+				#{board_img},  #{mem_id}, #{order_no}, #{board_ctgry_no})
+	</insert>
+	
+	<update id="updateBoard">
+		update board
+			set 
+				board_title = #{board_title}  
+				board_content = #{board_content}  
+				board_date = #{board_date}  
+				board_img = #{board_img}  
+				mem_id = #{mem_id}  
+				order_no = #{order_no}  
+				board_ctgry_no = #{board_ctgry_no}
+		where board_no = #{board_no}		  
+	</update>
+	
+	<update id="deleteBoard" parameterType="int boardNo">
+		update board
+			set BOARD_DELYN = 'Y'
+	</update>
+	
+	<select id="searchBoardbyTitle" parameterType="String">
+		select board 
+		where board_title = #{board_title}
+	</select>
+	
+	<select id="searchBoardbyId" parameterType="String">
+		select board 
+		where mem_id = #{mem_id}
+	</select>
+	
+	
+		
+</mapper>	

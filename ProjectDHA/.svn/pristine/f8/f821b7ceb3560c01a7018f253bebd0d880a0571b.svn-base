@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>반려견 추가하는 jsp</h1>
+DOG_NO, MEM_ID, DOG_NAME, DOG_BREED, DOG_GENDER, DOG_BIRTH, DOG_WEIGHT, DOG_IMG, DOG_DELYN
+
+</body>
+</html>

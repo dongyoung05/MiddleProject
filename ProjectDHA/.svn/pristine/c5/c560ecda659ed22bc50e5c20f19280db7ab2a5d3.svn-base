@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="reply">
+
+	<select id="replyPrintAll" resultType="ReplyVo">
+		select * from reply
+	</select>
+	
+	<insert id="insertReply" parameterType="ReplyVo">
+		insert into board (reply_no, reply_content, reply_writer, reply_date, board_no)
+		values (#{board_no} || lpad(reply_seq.nextval, 3, '0'),#{reply_content},
+				#{reply_writer}, sysdate, #{board_no}) 
+	</insert>
+	
+	<update id="updateReply" parameterType="ReplyVo" >
+		update reply
+			set 
+				reply_content = #{reply_content}  
+		where reply_no = #{reply_no}		  
+	</update>
+	
+	<update id="deleteReply" parameterType="String">
+		update reply
+			set BOARD_DELYN = 'Y'
+		where board_no = #{reply_no}	
+	</update>
+	
+	<select id="searchReplybyReply_no" parameterType="String" resultType="BoardVo">
+		select * from reply 
+		where reply_no = #{reply_no}
+	</select>
+	
+	
+	
+	
+		
+</mapper>	

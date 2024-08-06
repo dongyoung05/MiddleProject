@@ -1,0 +1,200 @@
+<%@page import="kr.or.ddit.vo.CartVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cart Main</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/cartScripts.js"></script>
+<script src="../js/공통스크립트.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/CartPage.css">
+<link rel="stylesheet" href="../css/Modal창.css">
+<%
+ 	CartVO cartVo = (CartVO)session.getAttribute("cart");
+%>
+<script>
+	mypath = '<%= request.getContextPath() %>';
+	prodImgPath = "../images/prod";
+	
+	$(function(){
+		$.cartList();
+	})
+</script>
+<style>
+
+</style>
+</head>
+<body>
+
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>
+	<div class="full-hr"></div>
+	
+	<div id="cart_section">
+	</div>
+	<div class="backProd">
+    <input type="button" value="상품 페이지로 돌아가기" id="backProd">
+</div>
+
+<!-- Modal 창 띄우기 -->
+<div class="modal_container" style="margin: none;">
+	<div class="modal">
+		<div class="modal_header">
+			<h3>구매 정보 확인</h3>
+		</div>
+		<hr>
+		<div class="modal_content">
+			<h3>장바구니 정보</h3>
+			<p>
+				<span class="modalSpan">상품명</span>
+				<span id="mmemName"></span>
+			</p>
+			<p>
+				<span class="modalSpan">ID</span>
+				<span id="mmemId"></span>
+			</p>
+			<p>
+				<span class="modalSpan">EMAIL</span>
+				<span id="mmemMail"></span>
+			</p>
+			
+			<h3>반려견 정보</h3>
+			<p>
+				<span class="modalSpan">이름</span>
+				<span id="mdogName"></span>
+			</p>
+			<p>
+				<span class="modalSpan">무게</span>
+				<span id="mweight"></span>
+			</p>
+			
+			<h3>예약 정보</h3>
+			<p>
+				<span class="modalSpan">IN</span>
+				<span id="min"></span>
+			</p>
+			<p>
+				<span class="modalSpan">OUT</span>
+				<span id="mout"></span>
+			</p>
+			
+			<h3>가격</h3>
+			<p>
+				<span class="modalSpan">총 가격</span>
+				<span id="mprice"></span>
+			</p>
+		</div>
+		<hr>
+		<div class="modal_footer">
+			<button id="cancel">예약취소</button>
+			<button id="pay">결제</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		//	장바구니 물품 수량 버튼 클릭 이벤트
+		$(document).on('click', '.qty-button', function(){
+			prodId = $(this).parents('.cartProdContainer').attr('id');
+			symbol = $(this).val();
+			
+			$.modifyProdCart(prodId, symbol);
+		})
+		
+		//	장바구니 물품 삭제 이벤트
+		$(document).on('click', '.removeButton', function(){
+			prodId = $(this).parents('.cartProdContainer').attr('id');
+			
+			$.deleteProdCart(prodId);
+		})
+		
+	})
+
+	//	상품 리스트로 돌아가기 버튼
+	$('#backProd').on('click', function(){
+		location.href="/ProjectDHA/prod/getAllProd.do";
+	})
+	
+	// 예약하기를 눌렀을 때 예약하기
+	$(document).on('click', '#checkout', function(){
+		price = $(this).prev().attr('price');
+		console.log("price : " + price);
+// 		no = $(this).parent().find('.no').text();
+// 		console.log(price + "  " + no);
+		
+// 		$.getJSON(
+<%-- 			"<%=request.getContextPath()%>/reserve/roomReserve.do", --%>
+// 			{
+// 				'sdate' : sdate,
+// 				'edate' : edate,
+// 				'stime' : stime,
+// 				'etime' : etime,
+// 				'price'	: price,
+// 				'no' : no,
+// 				'dogNo' : dogNo,
+<%-- 				'memId' : <%= memberVo.getMem_id()%> --%>
+// 			},
+// 			function(res){
+				
+// 				if(res.flag == '성공'){
+// 					reserveNo = res.no;
+// 					console.log(reserveNo);
+					
+<%-- 					$('#mmemName', parent.document).text('<%= memberVo.getMem_name()%>'); --%>
+<%-- 					$('#mmemId', parent.document).text('<%= memberVo.getMem_id()%>'); --%>
+<%-- 					$('#mmemMail', parent.document).text('<%= memberVo.getMem_email()%>'); --%>
+// 					$('#mdogName', parent.document).text(dogName);
+// 					$('#mweight', parent.document).text(weight);
+					
+// 					console.log("stime :" + stime);
+// 					console.log("etime :" + etime);
+// 					if(stime == "1") $('#min', parent.document).text(sdate + " 10:00");
+// 					else $('#min', parent.document).text(sdate + " 18:00");
+// 					if(etime == "1") $('#mout', parent.document).text(edate + " 09:59");
+// 					else $('#mout', parent.document).text(edate + " 17:59");
+					
+// 					$('#mprice', parent.document).text(price);
+// 					$.showModal();
+// 				} 
+// 			}
+// 		)
+	})
+	
+	//	장바구니 확인 Modal창 띄우기
+	$.showModal = function(){
+		console.log('show');
+		$('#modal_container', parent.document).fadeIn(200);
+	};
+
+	$.closeModal = function(){
+		console.log('close');
+		$('#modal_container', parent.document).fadeOut(200);
+	};
+
+	$('#cancel', parent.document).on('click', function(){
+		$.getJSON(
+			"<%=request.getContextPath()%>/reserve/cancelReserve.do",
+			{'reserveNo' : reserveNo},
+			function(res){
+			if(res.flag = '성공'){
+					alert('예약이 취소 되었습니다.');
+				}
+			}
+		)
+		$.closeModal();
+	});
+
+	$('#pay', parent.document).on('click', function(){
+		$.closeModal();
+	});
+	
+	
+</script>
+</body>
+
+</html>

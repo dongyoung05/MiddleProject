@@ -1,0 +1,170 @@
+<%@page import="com.google.gson.Gson"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.ReplyVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.BoardVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>																								
+  <script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+  <script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>
+  <script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+  <style>
+	table {
+  		font-family: arial, sans-serif;
+  		border-collapse: collapse;
+  		width: 100%;
+}
+
+	td, th {
+ 		 border: 1px solid #dddddd;
+  		 text-align: left;
+  		 padding: 8px;
+}
+
+</style>
+  	<%
+  		//AdminVO adminVo = (AdminVO)session.getAttribute("adminVo") 
+		BoardVO boardVo = (BoardVO)request.getAttribute("boardVo");
+  		String board_no = (String)request.getAttribute("board_no");
+  		String admin_id = null;
+  		Gson gson = new Gson();
+  		  		
+  		String imgPath = "../images/board";
+  	%>
+  <script>
+  admin_id = <%=admin_id %>;
+  	$(function() {
+  		
+  		$('#update').on('click',  function() {
+  			location.href="<%=request.getContextPath()%>/boardDetail.do?board_no=<%= boardVo.getBoard_no()%>&trigger=Y";
+  		});
+  		
+  		$('#delete').on('click',  function() {
+  			if(!confirm("해당 게시물을 삭제하시겠습니까?")){
+  				location.href = "<%=request.getContextPath()%>/boardDetail.do?board_no=<%= boardVo.getBoard_no()%>";
+  			} else {
+  				alert("정상적으로 삭제되었습니다.")
+  				location.href = "<%= request.getContextPath()%>/boardDelete.do?board_no=<%=boardVo.getBoard_no()%>";
+  			}
+  		});
+  		
+  		
+  		$("#boardlist").on('click', function(){
+  			location.href = "<%= request.getContextPath()%>/boardList_QUES.do";
+  		})
+  		
+  		$("#replyInsert").on('click', function(){
+  			replyContent = $(this).parents("#reply-container").find("#insertContent").val();
+  			
+  			 $.ajax({
+  				url : "<%=request.getContextPath()%>/replyList.do",
+  				type : 'post',
+  				data : {"reply_content" : reply_content,
+  					    "board_no" : board_no },
+  				dataType : 'json',
+  				success : function(result){
+  					$.each(result, function(i,v){
+  					
+  					reply_content = v.reply_content;
+  					
+  					reply_content = v.reply_content.replaceAll(/\n/g,"<br>");
+  					
+  					code = `<div class="reply-body">`
+  								<div class="reply=body2">
+  									<p class=p1>
+  										작성자: <span  class="admin_id">${v.admin_id}</span> &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;
+  										날짜: <span  class="reply_date">${v.reply_date}</span> ;
+  									</p>
+  									
+  					code += 	  `<p class=p2> 
+  									 <input reply_no="${v.reply_no}" type="button" value="댓글수정" name="replyUpdate" class="reply-action">
+  									 <input reply_no="${v.reply_no}" type="button" value="댓글삭제" name="replyDelete" class="reply-action">
+  									</p>
+  								<div>
+  								<p class="p3">
+  									${reply_content}
+  								</p>	
+  							<div>`;
+  					})//$.each
+  				},
+  				error : function(xhr){
+  					alert("상태 : " + xhr.status);
+  				}//error
+  				
+  			}) //ajax 
+  		})// click
+  		
+  	})//function
+  </script>
+</head>
+
+<body>
+<h2>게시글 내용</h2>
+	<div class="containaer">
+		<table border="1">
+		
+				<!-- <th>게시글번호</th>
+				<th>분류</th>
+				<th>제목</th>
+				<th>작성일자</th>
+				<th>내용</th> -->
+		
+		
+			<%-- <tr>
+				<td>게시글번호</td>
+				<td><%=boardVo.getBoard_no()%></td>
+			</tr> --%>
+			
+			<tr>
+				<td><%=boardVo.getBoard_title()%></td>
+			</tr>
+			
+			<tr>
+				<td>조회수:<%=boardVo.getBoard_views()%></td>
+			</tr>
+			
+			
+			
+			<%-- <tr>
+				<td>분류</td>
+				<td><%=boardVo.getBoard_ctgry_no()%></td>
+			</tr>  --%>
+			
+			<tr>
+				<td><%=boardVo.getBoard_date()%></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+				<img id="board_img" alt="<%= boardVo.getBoard_img() %>" src="<%= imgPath %>/<%= boardVo.getBoard_img()%>">
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2"><%=boardVo.getBoard_content()%></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<div id="reply-container">
+						<div class="replyCreate">
+							<textarea id="insertContent" rows="5 "cols="40"></textarea>
+							<input type="button" id="replyInsert" value="등록">
+							<input type="button" id="replyCancel" value="취소">
+						</div>
+						<hr>
+						<div id="replyList"></div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+			
+
+</body>
+</html>

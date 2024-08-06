@@ -1,0 +1,53 @@
+package kr.or.ddit.dao.reserve;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.ddit.util.MybatisUtil;
+import kr.or.ddit.vo.ReserveVO;
+
+public class ReserveDaoImpl implements IReserveDao{
+	private static IReserveDao dao;
+	
+	private ReserveDaoImpl() {}
+	
+	public static IReserveDao getInstance() {
+		if(dao == null) dao = new ReserveDaoImpl();
+		return dao;
+	}
+
+	@Override
+	public List<ReserveVO> getReserveList() {
+		SqlSession session = null;
+		List<ReserveVO> reList = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			reList = session.selectList("reserve.getReserveList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		
+		return reList;
+	}
+
+	@Override
+	public List<ReserveVO> getSalonReserveList() {
+		SqlSession session = null;
+		List<ReserveVO> reList = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			reList = session.selectList("reserve.getSalonReserveList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		
+		return reList;
+	}
+}

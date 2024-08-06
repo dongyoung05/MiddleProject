@@ -1,0 +1,53 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<%
+	MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+	int dog_no = Integer.parseInt(request.getParameter("dog_no"));
+	String aa = request.getParameter("aa");
+	if(aa != null) {
+%>
+		<script type="text/javascript">
+			alert(aa);
+		</script>		
+<%		
+	}
+%>
+
+</head>
+<body>
+<h1>updateDog 페이지</h1>
+
+
+
+	<form action="/ProjectDHA/dogUpdate.do?&dog_no=<%= dog_no%>&mem_id=<%=memberVo.getMem_id() %>" method="post" enctype="multipart/form-data"  >
+		<label>이름</label><input type="text" placeholder="반려견 이름을 입력하세요" name="dog_name"><br>
+		<label>종</label><input type="text" placeholder="반려견 종을 입력하세요" name="dog_breed"><br>
+		<label>성별</label> <select name = "dog_gender">
+							    <option>남</option>
+							    <option>여</option>
+							
+		  				</select><br>
+		<label>생일</label><input type="date" placeholder="반려견 생일을 입력하세요" name="dog_bir"><br>
+		
+		<label>체급</label><select name = "dog_weight">
+									<option>소형</option>
+							    	<option>중형</option>
+							    	<option>대형</option>
+		                  </select><br><br>
+		
+		<label>이미지</label><input type="file" name="dog_img"><br>
+		<input type='submit' value='등록'>
+		<input type='reset' value='초기화'>
+	
+	</form>
+
+</body>
+</html>

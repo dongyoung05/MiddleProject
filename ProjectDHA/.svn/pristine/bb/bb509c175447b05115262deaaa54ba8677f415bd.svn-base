@@ -1,0 +1,19 @@
+package kr.or.ddit.service.reply;
+
+import java.util.List;
+
+import kr.or.ddit.vo.ReplyVO;
+
+public interface IReplyService {
+	
+	public List<ReplyVO> replyPrintAll();
+	
+	public int insertReply (ReplyVO replyVo);
+	
+	public int updateReply (ReplyVO replyVo);
+	
+	public int deleteReply (String Reply_no);
+	
+	public ReplyVO searchReplyByReply_no (String Reply_no);
+
+}

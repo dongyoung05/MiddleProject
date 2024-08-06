@@ -1,0 +1,76 @@
+package kr.or.ddit.dao.member;
+
+import java.util.List;
+
+import kr.or.ddit.vo.MemberVO;
+
+public interface IMemberDao {
+	
+	/**
+	 * 회원 목록 전체를 리스트로 담아서 조회하는 메서드
+	 * @return 전체 회원목록(MemberVO)을 List에 담아서 반환
+	 */
+	public List<MemberVO> selectMemberList();
+
+	/**
+	 * 회원 가입을 처리하는 메서드<br>
+	 * @param mvo 회원가입에 필요한 각종 정보들을 mvo
+	 * @return 작업 성공하면 1, 실패하면 0 반환
+	 */
+	public int insertMember(MemberVO memberVo);
+	
+	/**
+	 * 회원의 id를 조회하여 해당 id에 맞는 회원 데이터를 보여주는 메서드<br>
+	 * 
+	 * @param mem_id 로그인한 회원의 id
+	 * @return 로그인한 회원의 정보를 vo에 담아서 반환
+	 */
+	public MemberVO selectGetMemberId(String mem_id);
+	
+	/**
+	 * 회원 정보를 수정하는 메서드
+	 * 
+	 * @param mvo 수정할 정보가 담긴 vo
+	 * @return 작업 성공하면 1, 실패하면 0 반환
+	 */
+	public int updateMember(MemberVO memberVo);
+	
+	/**
+	 * 회원 정보를 삭제하는 메서드 <br>
+	 * 해당 프로젝트에서 삭제는 delyn의 'N'값을 'Y'값으로 바꿈<br>
+	 * 따라서 업데이트 문으로 delyn을 Y로 바꿔주는 메서드...<br>
+	 *  
+	 * @param mem_id 삭제할 회원의 id를 받아옴
+	 * @return 작업 성공하면 1, 실패하면 0 반환
+	 */
+	public int delMember(String mem_id);
+	
+	/**
+	 * 회원가입시 아이디 중복체크 여부...
+	 * 
+	 * @param mem_id 입력한 mem_id
+	 * @return 중복되면 1, 안되면 0 반환
+	 */
+	public int checkMemberId(String mem_id);
+	
+	/**
+	 * 로그인을 처리하는 메서드 <br>
+	 * @param memberVo id와 pass를 담은 값
+	 * @return 로그인에 성공한 id에 맞는 vo값들
+	 */
+	public MemberVO loginMember(MemberVO memberVo);
+	
+	/**
+	 * 아이디를 찾아주는 메서드
+	 * @param memberVo 정보를 받을 메일과 이름
+	 * @return 성공하면 아이디를 리턴함
+	 */
+	public String findId(MemberVO memberVo);
+	
+	/**
+	 * 비밀번호를 찾아주는 메서드
+	 * @param memberVo 정보를 받을 메일과 본인 아이디, 이름
+	 * @return 성공하면 비밀번호를 리턴함
+	 */
+	public MemberVO findPass(MemberVO memberVo);
+}

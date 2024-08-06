@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ega8ut31pu&submodules=geocoder"></script>
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+map{
+	width: 50%;
+	height: 50%;
+	margin : 0px auto;
+}
+
+#map img{
+	display: block;
+	margin : 0px auto;
+}
+
+h1{
+	text-align : center;
+}
+
+#bus1{
+	color : green;
+}
+
+#bus img{
+	width : 40px;
+	height : 40px;
+	display: inline-block;
+}
+
+#sub1{
+	color : blue;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+$(function(){
+	padding();
+	
+	$(window).resize(function() {
+		padding();
+	});
+})
+
+function padding(){
+	$('.pad').css('margin-left', '10%');
+}
+</script>
+
+</head>
+<body>
+
+<h1>대전 본사</h1>
+
+
+<hr> <br>
+
+	<div class="search">
+		<input id="address" type="text" placeholder="검색할 주소" style ="display : none;">
+		<input id="submit" type="button" value="주소검색" style ="display : none;">
+	</div>
+	<div id="map" style="margin:0 auto; width:80%;height:600px;"></div>
+      
+	<div class="pad">
+		<h2>대전 중구 계룡로 846 3층 DHA애견호텔&nbsp[오류동 175-13]</h2>
+		<h4>TEL.042-222-8202 &nbsp &nbsp &nbsp FAX.042-222-8202</h4>
+	</div>
+	
+<hr>
+      
+<div id="bus">
+	<div class="pad" style="display: flex;">
+		<div style="display: flex; margin-right: 60px; width:140px;">
+			<img src="../images/intro/버스 이미지.png" alt="버스 이미지.png" style="margin-top: 20px;">
+			<h3 id="bus1" style="margin: 30px 0 0 10px;">시내버스</h3>
+		</div>
+		<div>
+			<h4 style="margin-bottom: 0;">서대전네거리역4번출구역</h4>
+			<h4 style="margin-top: 5px;">101번, 103번, 607번</h4>
+		</div>
+	</div>
+	<div class="pad" style="display: flex;">
+		<div style="display: flex; margin-right: 60px; width:140px;">
+			<img src="../images/intro/지하철 아이콘.png" alt="지하철 아이콘.png" style="margin-top: 20px;">
+			<h3 id="sub1" style="margin: 30px 0 0 10px;">지하철</h3>
+		</div>
+		<div>
+			<h4 style="margin-bottom: 0;">오룡역</h4>
+			<h4 style="margin-top: 5px;">1호선</h4>
+		</div>
+	</div>
+</div>
+
+<div>
+	
+</div>
+
+
+</body>
+
+ <script>
+    $(document).ready(function() {
+        var address = "대전 중구 계룡로 846"; //	주소 입력하는 곳
+        searchAddressToCoordinate(address);
+    });
+    
+    selectMapList();
+
+	//	검색한 주소의 정보를 insertAddress 함수로 넘겨준다.
+	function searchAddressToCoordinate(address) {
+		naver.maps.Service.geocode({
+		query: address
+		}, function(status, response) {
+			if (status === naver.maps.Service.Status.ERROR) {
+				return alert('Something Wrong!');
+			}
+			if (response.v2.meta.totalCount === 0) {
+				return alert('주소 정보가 없습니다.');
+			}
+			var htmlAddresses = [],
+			item = response.v2.addresses[0],
+			point = new naver.maps.Point(item.x, item.y);
+			if (item.roadAddress) {
+				htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
+			}
+			if (item.jibunAddress) {
+				htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
+			}
+			if (item.englishAddress) {
+				htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
+			}
+		insertAddress(item.roadAddress, item.x, item.y);
+		});
+	}
+
+	//	주소 검색의 이벤트
+	$('#address').on('keydown', function(e) {
+		var keyCode = e.which;
+		if (keyCode === 13) { // Enter Key
+			searchAddressToCoordinate($('#address').val());
+		}
+	});
+	$('#submit').on('click', function(e) {
+		e.preventDefault();
+		searchAddressToCoordinate($('#address').val());
+	});
+	naver.maps.Event.once(map, 'init_stylemap', initGeocoder);
+
+	//	검색정보를 테이블로 작성해주고, 지도에 마커를 찍어준다.
+	function insertAddress(address, latitude, longitude) {
+		var mapList = "";
+		mapList += "<tr>"
+		mapList += "   <td>" + address + "</td>"
+		mapList += "   <td>" + latitude + "</td>"
+		mapList += "   <td>" + longitude + "</td>"
+		mapList += "</tr>"
+
+		$('#mapList').append(mapList);   
+
+		var map = new naver.maps.Map('map', {
+			center: new naver.maps.LatLng(longitude, latitude),
+			zoom: 14
+		});
+		var marker = new naver.maps.Marker({
+			map: map,
+			position: new naver.maps.LatLng(longitude, latitude),
+		});
+	}
+
+  	//	지도를 그려주는 함수
+	function selectMapList() {
+	
+		var map = new naver.maps.Map('map', {
+			center: new naver.maps.LatLng(37.3595704, 127.105399),
+			zoom: 10
+		});
+	}
+
+
+	//	지도를 이동하게 해주는 함수
+	function moveMap(len, lat) {
+		var mapOptions = {
+			center: new naver.maps.LatLng(len, lat),
+			zoom: 15,
+			mapTypeControl: true
+		};
+		var map = new naver.maps.Map('map', mapOptions);
+		var marker = new naver.maps.Marker({
+			position: new naver.maps.LatLng(len, lat),
+			map: map
+		});
+	}
+	</script>
+</html>

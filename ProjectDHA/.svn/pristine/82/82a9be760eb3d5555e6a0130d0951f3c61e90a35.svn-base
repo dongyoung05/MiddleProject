@@ -1,0 +1,71 @@
+package kr.or.ddit.controller.prod;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.or.ddit.service.prod.IProdService;
+import kr.or.ddit.service.prod.ProdServiceImpl;
+import kr.or.ddit.vo.ProdVO;
+
+/**
+ * Servlet implementation class SearchCtgryProd
+ */
+@WebServlet("/prod/searchCtgryProd.do")
+public class SearchCtgryProd extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		
+		String weight = request.getParameter("weight");
+		String variable = request.getParameter("variable");
+		System.out.println("weight : " + weight);
+		System.out.println("varibale : " + variable);
+		Map<String, String> searchParameters = new HashMap<String, String>();
+		
+		//	체급 분류를 설정했을 경우
+		if(weight != null) {
+			searchParameters.put("wKey", "prod_weight");
+			searchParameters.put("wValue", weight);
+		}
+		
+		//	검색 분류를 설정했을 경우
+		if(variable != null) {
+			switch (variable) {
+				case "desc":
+					searchParameters.put("sKey", "prod_price");
+					searchParameters.put("sValue", variable);
+					break;
+				case "asc":
+					searchParameters.put("sKey", "prod_price");
+					searchParameters.put("sValue", variable);
+					break;
+				case "descTime":
+					searchParameters.put("sKey", "prod_no");
+					searchParameters.put("sValue", "desc");
+					break;
+			}
+		}
+		
+		//	서비스 객체 생성
+		IProdService service = ProdServiceImpl.getInstance();
+		List<ProdVO> prodList = service.searchCtgryProd(searchParameters);
+		
+		//	획득한 값 저장 및 전송
+		request.setAttribute("prodList", prodList);
+		request.getRequestDispatcher("/prod/prodSale.jsp").forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

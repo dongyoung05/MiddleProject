@@ -1,0 +1,21 @@
+package kr.or.ddit.dao.reply;
+
+import java.util.List;
+
+import kr.or.ddit.vo.ReplyVO;
+
+public interface IReplyDao {
+	
+	public List<ReplyVO> replyPrintAll();
+	
+	public int insertReply (ReplyVO replyVo);
+	
+	public int updateReply (ReplyVO replyVo);
+	
+	public int deleteReply (String Reply_no);
+	
+	public List<ReplyVO> searchReplyByReply_no (String Reply_no); 
+	
+	
+
+}

@@ -1,0 +1,34 @@
+package kr.or.ddit.service.room;
+
+import java.util.List;
+
+import kr.or.ddit.dao.room.IRoomDao;
+import kr.or.ddit.dao.room.RoomDaoImpl;
+import kr.or.ddit.vo.RoomVo;
+
+public class RoomServiceImpl implements IRoomService{
+	private IRoomDao dao;
+	
+	private static IRoomService service;
+	
+	private RoomServiceImpl() {
+		dao = RoomDaoImpl.getInstance();
+	}
+	
+	public static IRoomService getInstance() {
+		if(service == null) service = new RoomServiceImpl();
+		
+		return service;
+	}
+
+	@Override
+	public RoomVo getRoom(String room_no) {
+		return dao.getRoom(room_no);
+	}
+
+	@Override
+	public List<RoomVo> getRoomList() {
+		return dao.getRoomList();
+	}
+	
+}

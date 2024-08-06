@@ -1,0 +1,73 @@
+package kr.or.ddit.vo;
+
+public class RoomVo {
+	
+	private String room_no;
+	private String room_type;
+	private String room_title;
+	private String room_desc;
+	private String room_img;
+	private int room_price_all;
+	private int room_price_day;
+	private int room_price_night;
+	private String hotel_id;
+	
+	
+	public String getRoom_no() {
+		return room_no;
+	}
+	public void setRoom_no(String room_no) {
+		this.room_no = room_no;
+	}
+	public String getRoom_type() {
+		return room_type;
+	}
+	public void setRoom_type(String room_type) {
+		this.room_type = room_type;
+	}
+	public String getRoom_title() {
+		return room_title;
+	}
+	public void setRoom_title(String room_title) {
+		this.room_title = room_title;
+	}
+	public String getRoom_desc() {
+		return room_desc;
+	}
+	public void setRoom_desc(String room_desc) {
+		this.room_desc = room_desc;
+	}
+	public String getRoom_img() {
+		return room_img;
+	}
+	public void setRoom_img(String room_img) {
+		this.room_img = room_img;
+	}
+	public int getRoom_price_all() {
+		return room_price_all;
+	}
+	public void setRoom_price_all(int room_price_all) {
+		this.room_price_all = room_price_all;
+	}
+	public int getRoom_price_day() {
+		return room_price_day;
+	}
+	public void setRoom_price_day(int room_price_day) {
+		this.room_price_day = room_price_day;
+	}
+	public int getRoom_price_night() {
+		return room_price_night;
+	}
+	public void setRoom_price_night(int room_price_night) {
+		this.room_price_night = room_price_night;
+	}
+	public String getHotel_id() {
+		return hotel_id;
+	}
+	public void setHotel_id(String hotel_id) {
+		this.hotel_id = hotel_id;
+	}
+	
+	
+	
+}

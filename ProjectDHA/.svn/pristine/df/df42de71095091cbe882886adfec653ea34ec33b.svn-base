@@ -1,0 +1,252 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.List"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Sale</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/중분류페이지공통스타일.css">
+
+<style>
+	#prod_container {
+		display : flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+		align-content: flex-start;
+	}
+	.item {
+		width: calc(25% - 7px);
+		aspect-ratio: 6/5;
+		position: relative;
+		overflow: hidden;
+		border-radius: 10px;
+	}
+	.item:after {
+		display: block;
+		content: "";
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.2);
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		opacity: 0;
+	}
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	.thumbnail img {
+		width : 100%;
+		height : 100%;
+		object-fit: cover;
+		z-index : 1;
+	}
+	.description{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: flex-start;
+		z-index: 3;
+	}
+	.description p {
+		color: black;
+		margin: 10px 0;
+	}
+	.description .prod_name {
+		font-size: 20px;
+		font-weight: 6000;
+		opacity: 0;
+ 		transform: translateY(50px);
+	}
+	.description .prod_price {
+		font-size: 14px;
+		font-weight: 400;
+		opacity: 0;
+ 		transform: translateY(50px);
+	}
+	.item:hover:after {
+		opacity: 1;
+	}
+	.item:hover .thumbnail img {
+		transform: scale(1.1);
+		filter: blur(3px);
+	}
+	.item:hover .prod_name, .item:hover .prod_price {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+	.item:after, .item .description img, .item .prod_name, .item .prod_price {
+  		transition: all 0.4s ease-in-out;
+	}
+</style>
+<script>
+	$(function(){
+		//	로고 클릭시 홈으로
+		$('#logo').on('click', function(){
+			location.href="<%= request.getContextPath()%>/main/main.jsp";
+		})
+		
+		//	중분류 페이지 이동
+		$('#hotel_intro').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelIntro.jsp";
+		})
+		
+		//	호텔 예약 페이지 이동
+		$('#hotel_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelReserve.jsp";
+		})
+		
+		//	미용 예약 페이지 이동
+		$('#salon_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/salon/salonReserve.jsp";
+		})
+		
+		//	애견상품 판매 페이지 이동
+		$('#prod_sale').on('click', function(){
+			location.href="<%= request.getContextPath()%>/prod/getAllProd.do";
+		})
+		
+		//	문의사항 페이지 이동
+		$('#hotel_help').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelHelp.jsp";
+		})
+		
+		//	등록 버튼
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		$('.description').on('click', function(){
+			prodNo = $(this).attr('idx');
+			location.href = `<%= request.getContextPath() %>/prod/getSelectProd.do?prodNo=${prodNo}`;
+		})
+	})
+	
+</script>
+</head>
+<%
+	String imgPath = "../images/main";
+	String prodImgPath = "../images/prod";
+	List<ProdVO> prodList = (List<ProdVO>)request.getAttribute("prodList");
+	MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+%>
+<body>
+	<div class="header">
+		<!-- 로고 이미지 - images폴더에서 사진 가져옴 -->
+		<img id="logo" src="<%= imgPath %>/DHA_logo3.png" alt="DHA_logo3.png">
+		
+		<div id="profile" class="profile">
+			<%
+			if(memberVo == null){			
+			%>	
+			<img id="profileImg" src="<%= imgPath %>/대충회원프로필1.png" alt="대충회원프로필1.png">
+			<div id="profile_detail">
+				<!-- 이름 -->
+				<p>로그인이 필요합니다.</p>
+				<a href="<%= request.getContextPath() %>/member/LoginMember.jsp">로그인</a>
+				<a href="<%= request.getContextPath() %>/member/InsertMember.jsp">회원가입</a>
+			</div>	
+			<%
+			} else {
+			%>		
+			<img id="profileImg" src="..images/member/<%=memberVo.getMem_img() %>" alt="대충회원프로필1.png">
+			<!-- 프로필 옆에 문구 + 밑에 버튼 2개 -->
+			<div id="profile_detail">
+				<!-- 이름 -->
+				<p><%=memberVo.getMem_name() %>님 반갑습니다.</p>
+				<a href="<%= request.getContextPath() %>/member/mypageMember.jsp">마이페이지</a>
+				<a href="<%= request.getContextPath() %>/logoutMember.do">로그아웃</a>
+			</div>	
+			<%
+			}
+			%>
+		</div>
+	</div>
+
+	<div class="nav">
+		<div id="hotel_intro">
+			<h3>소개</h3>
+		</div>
+		
+		<div id="hotel_reserve">
+			<h3>호텔</h3>
+		</div>
+		
+		<div id="salon_reserve">
+			<h3>미용</h3>
+		</div>
+		
+		<div id="prod_sale">
+			<h3>상품</h3>
+		</div>
+		
+		<div id="hotel_help">
+			<h3>Q&A</h3>
+		</div>
+	</div>
+	
+	<div id="container">
+		<div id="side">
+			<h3>애견 상품</h3>
+			<p class="ctrgyBar">사료</p>		
+			<p class="ctrgyBar">간식</p>		
+			<p class="ctrgyBar">의류</p>		
+			<p class="ctrgyBar">악세사리</p>		
+			<p class="ctrgyBar">위생용품</p>		
+			<p class="ctrgyBar">배변용품</p>		
+			<p class="ctrgyBar">목욕용품</p>		
+			<p class="ctrgyBar">산책용품</p>		
+			<p class="ctrgyBar">훈련용품</p>		
+			<p class="ctrgyBar">장난감</p>		
+		</div>
+		<input type="button" value="등록" id="insertProd">
+		<div id="section">
+			<h2>상품</h2>
+			<div class="hr"></div>
+			<div id="prod_container">
+				<%
+				for(ProdVO prod : prodList) {
+				%>
+					<div class="item">
+						<div class="thumbnail">
+							<img alt="<%= prod.getProd_img() %>" src="<%= prodImgPath %>/<%= prod.getProd_img()%>">
+						</div>
+						<div class="description" idx="<%= prod.getProd_no() %>">
+							<p class="prod_name"><%= prod.getProd_name() %></p>
+							<p class="prod_price"><%= prod.getProd_price() %></p>
+						</div>
+					</div>
+				<%
+				}
+				%>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+	
+</body>
+</html>

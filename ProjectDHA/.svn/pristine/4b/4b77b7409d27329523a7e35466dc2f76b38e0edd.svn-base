@@ -1,0 +1,93 @@
+package kr.or.ddit.controller.cart;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import kr.or.ddit.service.cart.CartServiceImpl;
+import kr.or.ddit.service.cart.ICartService;
+import kr.or.ddit.service.prodcart.IProdCartService;
+import kr.or.ddit.service.prodcart.ProdCartServiceImpl;
+import kr.or.ddit.vo.CartVO;
+import kr.or.ddit.vo.ProdCartVO;
+
+@WebServlet("/cart/cartInsert.do")
+public class CartInsert extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=UTF-8");
+		
+		String mem_id = request.getParameter("mem_id");
+		String prodNo = request.getParameter("prodNo");
+		int prodQty = Integer.parseInt(request.getParameter("prodQty"));
+		
+		//	서비스 객체 생성
+		ICartService cartService = CartServiceImpl.getInstance();
+		IProdCartService prodCartService = ProdCartServiceImpl.getInstance();
+		
+		//	session 생성
+		//	 - 이미 존재할 경우 새로운 세션을 생성하지 않고 기존의 세션을 반환한다
+		HttpSession session = request.getSession(false);
+		
+		//	생성된 카트가 없는 경우
+		if(session.getAttribute("cart") == null) {
+			int chk = cartService.insertCart(mem_id);
+			if(chk == 0) {
+				//	생성에 실패한 경우 - 에러메시지 띄우고 담기 종료하기
+				PrintWriter writer = response.getWriter();
+				writer.println("<script>alert(" + "장바구니 생성에 실패하였습니다. 잠시 후, 다시 실행해주세요." 
+				                                + "); location.href='"+request.getContextPath()
+				                                + "/prod/getSelectProd.do?prodNo='" + prodNo + ";</script>");
+				writer.flush();
+			} else {
+				//	생성에 성공한 경우 - 세션에 장바구니에 대한 정보 추가하기
+				CartVO cartVo = cartService.getUserCart(mem_id);
+				session.setAttribute("cart", cartVo);
+			}
+		}
+		
+		if(session.getAttribute("cart") != null) {
+			//	생성된 장바구니가 있는 경우
+			CartVO userCart = (CartVO)session.getAttribute("cart");
+			
+			//	장바구니에 상품 담기
+			//	장바구니 번호 가져오기
+			String cartNo = userCart.getCart_no();
+			
+			//	상품 장바구니 객체 생성
+			ProdCartVO prodCart = new ProdCartVO();
+			
+			//	상품 장바구니에 정보 추가
+			prodCart.setCart_no(cartNo);
+			prodCart.setProd_no(prodNo);
+			prodCart.setProd_qty(prodQty);
+			
+			int cnt = prodCartService.insertProdCart(prodCart);
+			
+			if(cnt == 0) {
+				//	장바구니에 물건 담기를 실패한 경우
+				PrintWriter writer = response.getWriter();
+				writer.println("<script>alert(" + "장바구니에 담기가 정상적으로 실행되지 않았습니다. 잠시 후, 다시 실행해주세요." 
+				                                + "); location.href='"+request.getContextPath()
+				                                + "/prod/getSelectProd.do?prodNo='" + prodNo + ";</script>");
+				writer.flush();
+			} else {
+				
+			}
+		}
+		
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

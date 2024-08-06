@@ -1,0 +1,93 @@
+package kr.or.ddit.controller.board;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.service.board.IBoardService;
+import kr.or.ddit.vo.BoardVO;
+
+/**
+ * Servlet implementation class BoardUpdate
+ */
+@WebServlet("/boardUpdate.do")
+public class BoardUpdate extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//받아오는 데이터 인코딩
+				request.setCharacterEncoding("utf-8");
+				response.setCharacterEncoding("utf-8");
+				//가져온 데이터를 담을 VO객체
+				BoardVO boardVo = new BoardVO();
+//				String board_no = request.getParameter("board_no");
+//				String board_title = request.getParameter("board_title");
+//				String board_content = request.getParameter("board_content");
+//				String board_date = request.getParameter("board_date");
+//				String board_ctgry_no = request.getParameter("board_ctgry_no");
+				
+//				boardVo.setBoard_no(board_no);
+//				boardVo.setBoard_title(board_title);
+//				boardVo.setBoard_content(board_content);
+//				boardVo.setBoard_date(board_date);
+//				boardVo.setBoard_ctgry_no(board_ctgry_no);
+				
+				String uploadPath = "d:/d_other/uploadFiles";
+				
+				File file = new File(uploadPath);
+				
+				if(!file.exists()) {
+					file.mkdirs();
+				}
+				Part part = request.getPart("upfile1");
+				String fileName = extractFileName(part);
+					if(!fileName.isEmpty()) { // 파일인지 검사 
+						String saveFileName = UUID.randomUUID().toString()+"_"+fileName; 
+						part.write(uploadPath + "/" + saveFileName);
+					}
+					
+					boardVo.setBoard_img(uploadPath+"/"+fileName);
+
+				try {
+					BeanUtils.populate(boardVo, request.getParameterMap());
+				} catch (IllegalAccessException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+				//서비스 객체 얻기
+				IBoardService service = BoardServiceImpl.getInstance();
+				//서비스 메소드 호출 -결과값 가져오기
+				service.insertBoard(boardVo);
+				
+				
+				//view페이지로 이동
+				request.getRequestDispatcher("/board/boardDetail.jsp").forward(request, response);
+			}
+
+
+			private String extractFileName(Part part) {
+				String fileName =" ";
+				String headerValue = part.getHeader("content-disposition");
+				String[] itemArr = headerValue.split(";");
+				for(String item : itemArr) {
+					if(item.trim().startsWith("filename")) {// 'fileName'이 있는 영역 찾기  
+						fileName = item.substring(item.indexOf("=")+2, item.length()-1);  // = 의 두칸 뒤 "" 제거하고 가운데 
+					}
+				}
+				return fileName;
+			}
+
+		}

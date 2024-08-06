@@ -1,0 +1,14 @@
+package kr.or.ddit.dao.prodcart;
+
+import kr.or.ddit.vo.ProdCartVO;
+
+public interface IProdCartDao {
+	
+	/**
+	 * 장바구니에 상품을 담는 메서드
+	 * @param prod : 담을 상품에 대한 정보(상품명, 상품 수량)이 담긴 ProdCartVO 객체
+	 * @return 작업 성공 : 1, 작업 실패 : 0
+	 */
+	public int insertProdCart(ProdCartVO prodCart);
+
+}

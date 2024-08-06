@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+
+
+/*  일단 모든 div에 border 주기 */
+div{ 
+	margin: 5px; 
+ } 
+
+body{
+/* 	background: #FAEAD9; */
+	padding: 1% 12% 1% 12%;
+}
+
+hr{
+	width: 30%;
+	background: black;
+	border-bottom: 2px;
+	color: balck;
+}
+
+.header{
+	display : flex;
+	text-align: center;
+}
+
+.nav{
+	display: flex;
+	justify-content: space-around;
+	padding: 5px 20% 5px 20%;
+	margin-bottom: 30px;
+}
+
+.containers{
+	text-align: center;
+}
+
+.container{
+	margin-bottom: 100px;
+	height: 400px;
+}
+
+.container img{
+	width: 25%; 
+	margin: 1%;
+}
+
+.footer{
+	height: 120px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.footer div{
+	border: 1px solid balck;
+	width: 30%;
+}
+
+.nav div{
+	border-radius: 10px;
+	width: 120px;
+	text-align: center;
+}
+
+.nav div:hover{
+	color: gray;
+}
+
+.hr{
+	border: 1px solid black;
+	width: 40%;
+	margin: 0 auto;
+}
+
+#profile{
+	margin-left : auto;
+	display : flex;
+}
+
+#profile_detail{
+	width : 200px;
+}
+
+#profile_detail p{
+	margin-top: 20px;
+}
+
+#profile_detail input{
+	background: white;
+	border: none;
+}
+
+img{
+	width: 90%;
+	height: 90%;
+}
+
+#profileImg{
+	height: 90px;
+	width: 90px;
+}
+
+#logo{
+	height: 100px;
+	width: 200px;
+	margin-left: 40%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

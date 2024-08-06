@@ -1,0 +1,65 @@
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<body>
+	<%
+  		
+		NoticeVO noticeVo = (NoticeVO)request.getAttribute("noticeVo");
+  	%>
+  	
+<script>
+$(function(){
+	$('#notice_noticeList').click(function(){
+		location.href="<%= request.getContextPath()%>/noticeList.do";
+	})
+})
+
+</script>  	
+  	
+<div class="containaer">
+		<table border="1">
+			<tr>
+				<td>제목</td>
+			</tr>
+			<tr>
+				<td><%=noticeVo.getNotice_title()%></td>
+			</tr>
+			<tr>
+				<td>작성일자</td>
+			</tr>
+			<tr>
+				<td><%=noticeVo.getNotice_date()%></td>
+			</tr>
+			
+			<tr>
+				<td>본문</td>
+			</tr>
+			<tr>
+				<td id="cont"><%=noticeVo.getNotice_content()%></td>
+			</tr>
+			
+			<tr>
+				<td >이미지</td>
+			</tr>
+			<tr>
+				<td >
+					<img id="notice_img" src="../images/notice/<%= noticeVo.getNotice_no() %>">
+				</td>
+			</tr>
+		</table>
+		
+		 <div class="buttons">
+        	
+        	<input type="button" id="notice_noticeList" value="게시글목록">
+    	</div>
+	</div>
+	
+</body>
+</html>

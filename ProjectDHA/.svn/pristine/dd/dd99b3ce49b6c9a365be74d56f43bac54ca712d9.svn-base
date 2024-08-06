@@ -1,0 +1,88 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Admin</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script>
+	$(function(){
+		$.ajax({
+			url : `<%= request.getContextPath() %>/prod/getAllCtrgy.do`,
+			type : 'post',
+			dataType : 'json',
+			success : function(result){
+				code = "";
+				$.each(result, function(i,v){
+					code += `<option value="${v.prod_ctgry_id}"> ${v.prod_ctgry_name} </option>`;
+				})
+				
+				$('#prod_ctgry_id').append(code);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status)
+			}
+		})
+	})
+</script>
+</head>
+ 
+<body>
+<form action="<%= request.getContextPath() %>/prod/prodInsert.do" method="post" enctype="multipart/form-data">
+	<table>
+		<tr>
+			<td>상품명</td>
+			<td><input type="text" name="prod_name" id="prod_name"></td>
+		</tr>
+		<tr>
+			<td>상품 설명</td>
+			<td><textarea rows="5" cols="50" name="prod_desc" id="prod_desc"></textarea></td>
+		</tr>
+		<tr>
+			<td>상품 사이즈</td>
+			<td>
+				<select name="prod_size" id="prod_size">
+					<option value="None">없음</option>
+					<option value="S"   >S</option>
+					<option value="M"   >M</option>
+					<option value="L"   >L</option>
+					<option value="XL"  >XL</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>상품 색상</td>
+			<td><input type="text" name="prod_color" id="prod_color" placeholder="색상이 없는 상품의 경우 비울 것"></td>
+		</tr>
+		<tr>
+			<td>상품 이미지</td>
+			<td><input type="file" name="prod_img" id="prod_img"></td>
+		</tr>
+		<tr>
+			<td>상품 가격</td>
+			<td><input type="number" name="prod_price" id="prod_price"></td>
+		</tr>
+		<tr>
+			<td>상품 분류 선택</td>
+			<td>
+				<select name="prod_ctgry_id" id="prod_ctgry_id">
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="submit" name="prodSubimt" id="prodSubmit" value="등록">
+				<input type="reset" name="prodReset" id="prodReset" value="취소">
+			</td>
+		</tr>
+	</table>
+</form>
+
+</body>
+</html>
+

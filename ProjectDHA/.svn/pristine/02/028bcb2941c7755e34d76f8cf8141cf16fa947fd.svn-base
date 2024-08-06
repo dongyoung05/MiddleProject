@@ -1,0 +1,115 @@
+/**
+ * 
+ */
+
+
+$(function(){
+	
+	// 로고 클릭시 홈으로
+	$('#logo').on('click', function(){
+		location.href="/ProjectDHA/main/main.jsp";
+	})
+		
+	// 중분류 페이지 이동
+	$('#hotel_intro').on('click', function(){
+		location.href="/ProjectDHA/hotel/hotelIntro.jsp";
+	})
+		
+	$('#hotel_reserve').on('click', function(){
+		location.href="/ProjectDHA/room/room.jsp";
+	})
+		
+	$('#salon_reserve').on('click', function(){
+		location.href="/ProjectDHA/salon/salonIntro.jsp";
+	})
+		
+	$('#prod_sale').on('click', function(){
+		location.href="/ProjectDHA/prod/getAllProd.do";
+	})
+		
+	$('#hotel_help').on('click', function(){
+	  location.href="/ProjectDHA/boardList_QUES.do";
+	})
+		
+	// 소분류 페이지로 이동
+	$('#sp1p1').on('click', function(){
+		location.href="/ProjectDHA/hotel/hotelIntro.jsp?p=p1";
+	})
+		
+	$('#sp1p2').on('click', function(){
+		location.href="/ProjectDHA/hotel/hotelIntro.jsp?p=p2";
+	})
+		
+	$('#sp1p3').on('click', function(){
+		location.href="/ProjectDHA/hotel/hotelIntro.jsp?p=p3";
+	})
+		
+	$('#sp2p1').on('click', function(){
+		location.href="/ProjectDHA/room/room.jsp?p=p1";
+	})
+		
+	$('#sp2p2').on('click', function(){
+		location.href="/ProjectDHA/room/room.jsp?p=p2";
+	})
+		
+	$('#sp3p1').on('click', function(){
+		location.href="/ProjectDHA/salon/salonIntro.jsp?p=p1";
+	})
+		
+	$('#sp3p2').on('click', function(){
+		location.href="/ProjectDHA/salon/salonIntro.jsp?p=p2";
+	})
+		
+	$('#sp4p1').on('click', function(){
+		location.href="/ProjectDHA/prod/getAllProd.do";
+	})
+		
+	$('#sp5p1').on('click', function(){
+		location.href="/ProjectDHA//noticeList.do?p=p1";
+	})
+		
+	$('#sp5p2').on('click', function(){
+		location.href="/ProjectDHA/boardList_QUES.do?p=p2";
+	})
+		
+	$('#sp5p3').on('click', function(){
+		location.href="/ProjectDHA/boardList_QUES.do?p=p3";
+	})
+		
+		
+	// hover 효과
+	$('#smallPage').hide();
+		
+	$('#bigPage div').on('mouseenter', function(){
+		$(this).css('color', 'gray');
+		$('#smallPage').show();
+	})
+		
+	$('#bigPage div').on('mouseleave', function(){
+		$(this).css('color', 'black');
+	})
+		
+	$('#smallPage p').on('mouseenter', function(){
+		$(this).css('color', 'black');
+	})
+		
+	$('#smallPage p').on('mouseleave', function(){
+		$(this).css('color', 'gray');
+	})
+	
+	$('.nav').on('mouseleave', function(){
+		$('#smallPage').hide();
+	})
+		
+		
+	
+})
+
+	
+	
+	
+	
+	
+	
+	
+	

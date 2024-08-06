@@ -1,0 +1,51 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+
+List<HashMap<String, Object>> list = 
+	(List<HashMap<String, Object>>)request.getAttribute("list");
+String type = (String)request.getAttribute("type");
+
+if("prod".equals(type)){
+	%>
+	{
+		"list" : [
+		
+		<%
+			for(int i=0;i<list.size();i++){
+				HashMap<String, Object> map = list.get(i);
+				if(i>0) out.print(",");
+				%>
+				{
+					"orderNo" : "<%= map.get("ORDER_NO") %>",
+					"qty" : "<%= map.get("PROD_QTY") %>",
+					"prodName" : "<%= map.get("PROD_NAME") %>",
+					"prodPrice" : "<%= map.get("PROD_PRICE") %>",
+					"price" : "<%= map.get("PAY_PRICE") %>",
+					"date" : "<%= map.get("PAY_DATE") %>"
+				}
+				<%
+			}
+		%>
+		],
+		"type" : "prod"
+	}
+	<% 
+} else {
+	
+}
+%>
+
+
+
+
+
+
+
+
+
+
+
+

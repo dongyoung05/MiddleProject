@@ -1,0 +1,318 @@
+/**
+ * 
+ */
+
+//조회수증가
+$.hitUpdate = function(){
+	$.ajax({
+		url: `${mypath}/hitUpdate.do`,
+		type: 'get',
+		data: {num : vidx},
+		success: function(result){
+			//화면의 조회수 숫자 변경
+			vp = $(gthis).parents('.card');
+			
+			vhit = parseInt($(vp).find('.hi').text()) +1;
+			
+			$(vp).find('.hi').text(vhit);
+			
+		},
+		error: function(xhr){
+			alert("상태: "+xhr.status);
+		},
+		dataType: 'json'
+			
+	})
+}
+
+//게시글 수정
+$.boardUpdate = function(){
+	
+	$.ajax({
+		url: `${mypath}/boardUpdate.do`,
+		type: 'post',
+		data: JSON.stringify(fdata),//직렬화 script객체를 전송가능한 json형식의 문자열로 변환
+		success: function(result){
+			//alert(result.flag);
+			
+			// 성공시  본문의 내용을 fdata의 내용으로 갱신
+			$(vparents).find('a').text(fdata.subject)
+			//$(vparents).find('.wr').text(fdata.writer)
+			$(vparents).find('.em').text(fdata.mail)
+			
+			fcont = fdata.content;
+			fcont = fcont.replaceAll(/\n/g,"<br>")
+			
+			$(vparents).find('.p3').html(fcont)
+		},
+		error: function(xhr){
+			alert("상태: "+xhr.status)
+		},
+		dataType: 'json'
+		
+	})
+}
+
+//게시글 삭제
+$.boardDelete = function(){
+	$.ajax({
+		url: `${mypath}/boardDelete.do`,
+		type: 'get',
+		data: {num : vidx},
+		success: function(result){
+			//alert(result.flag);
+			//성공하면 - list
+			$.listPage()
+		},
+		error : function(xhr){
+			alert("상태: "+xhr.status)
+		},
+		dataType : 'json'
+	})
+}
+
+//게시글 작성
+$.boardInsert = function(){
+	$.ajax({
+		url: `${mypath}/boardInsert.do`,
+		type: 'post',
+		data: JSON.stringify(fdata),
+		success : function(){
+			//성공하면 list
+			$.listPage();
+		},
+		error : function(xhr){
+			alert("상태 :" +xhr.status)
+		},
+		dataType: 'json'
+	
+	})
+}
+//댓글수정
+$.replyUpdate = function(){
+	$.ajax({
+		url : `${mypath}/replyUpdate.do`,
+		type : 'post',
+		//data : reply,
+		data : {cont : newcont, renum : vidx},
+		//data : JSON.stringify(
+			//{cont : newcont, renum : vidx})
+	   	success : function(result){
+			//성공하면 
+			//화면을 변경하기 -vp3에 modiout으로 변경
+			$(vp3).html(modiout);
+		},
+		error : function(xhr){
+			alert("상태 : "+xhr.status )
+		},
+		dataType : 'json'
+		
+	})
+}
+//댓글 삭제
+$.replyDelete = function(){
+	/*컨트롤러에서
+	request.getParameter("renum")*/
+	
+	//직렬화 형태로 보내면 컨트롤러에서 
+	//InputStream /Reader을 이용해서 읽는다.
+	//다시 객체형태로 변환 - 역직렬화
+	$.ajax({
+		url: `${mypath}/replyDelete.do`,
+		type : 'post',
+		
+		//data : {renum : vidx},
+		data : JSON.stringify({renum : vidx}), //객체 제이슨 문자열로 변환 :직렬화
+		success : function(result){
+			if(result.flag=="성공"){
+				//화면지우기
+				$(gthis).parents('.reply-body').remove();
+			}
+		},
+		error : function (xhr){
+			alert("상태 : "+xhr.status);
+		},
+		dataType : 'json'
+	})
+	
+}
+//댓글쓰기
+$.replyInsert = function(){
+	
+	$.ajax({
+		url : `${mypath}/replyInsert.do`,
+		type : 'post',
+		data : reply, 
+		success : function(result){
+			//저장 성공시 댓글 출력
+		$.replyList();	
+		},
+		error : function(xhr){
+			alert("상태: "+xhr.status);
+		},
+		dataType : 'json'
+	})
+}
+
+//댓글 가져오기
+$.replyList = function(){
+	
+	$.ajax({
+		url : `${mypath}/replyList.do`,
+		type : 'get',
+		data :  {bonum : vidx}, // 직렬화: script객체->JSON 형식의 문자열
+		success : function(result){
+			//alert("성공");
+			rcode ="";
+			$.each(result,function(i,v) {
+				
+				rcont = v.cont; //엔터만 포함
+				
+				rcont = rcont.replaceAll(/\n/g,"<br>")
+				
+			rcode +=		`<div class="reply-body">
+					            <div class="p12">
+					               <p class="p1">
+					                                     작성자:<span class="rwr">${v.name}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                                     날짜 :<span class="rda">${v.redate}</span>         
+					               </p>
+					               <p class ="p2">`;
+			if(user != null && user.mem_name==v.name){
+			rcode +=		   ` <input idx="${v.renum}" type="button"  value="댓글수정" name="remodify"  class="action" >
+					               <input idx="${v.renum}" type="button"  value="댓글삭제" name="redelete"  class="action" >
+									`};
+					               
+			rcode +=			`</p>
+					            </div>
+					            <p class="rp3">
+					               ${rcont} 
+					            </p>
+					            
+					        </div>`;
+			}) //$.each
+			vparent =  $(gthis).parents('.card');
+			vbody= vparent.find('.card-body');
+			
+			$(vbody).find('.reply-body').remove();
+			
+			$(vbody).append(rcode);
+		},
+		error : function(xhr){
+			alert("상태: "+xhr.status);
+		},
+		dataType : 'json'
+		
+	})
+}
+$.listPage = function(){
+	
+	vstype = $('#stype option:selected').val().trim();
+	vsword = $('#sword').val().trim();
+	
+/*	console.log(vstype, vsword);*/
+	 
+	  $.ajax({
+		  url : `${mypath}/boardList.do`,
+		  data : {"page" : currentPage,
+			  	  "stype" : vstype,
+			  	  "sword" : vsword
+		  },
+		  type : 'post',
+		  success : function(result){
+			  //alert("성공");
+			  
+			  code = `<div class="container mt-3">
+				  <h2>문의*신고게시판</h2>
+				  <div id="accordion">`
+				  
+				  $.each(result.datas, function(i,v){
+					
+					cont = v.content;
+					cont = cont.replaceAll(/\n/g,"<br>")
+					  code += `<div class="card">
+					      <div class="card-header">
+					        <a class="btn action" idx="${v.num}"  name="list" data-bs-toggle="collapse" href="#collapse${v.num}">
+					        ${v.subject}
+					        </a>
+					      </div>
+					      <div id="collapse${v.num}" class="collapse" data-bs-parent="#accordion">
+					        <div class="card-body">
+					            <div class="p12">
+					               <p class="p1">
+					                             작성자:<span class="wr">${v.writer}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                          이메일:<span class="em">${v.mail}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                          조회수:<span class="hi">${v.hit}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                          날짜 :<span class="da">${v.wdate}</span>         
+					               </p>
+					               <p class ="p2">`
+									//if(user != null && user.mem_name == v.writer){
+										
+					              		code+= ` <input idx="${v.num}" type="button"  value="수정" name="modify"  class="action">
+					               			     <input idx="${v.num}" type="button"  value="삭제" name="delete"  class="action">`
+					               
+									//}
+								code+= `</p>
+					            </div>
+					            <p class="p3">
+					               ${cont} <br>
+					            </p>
+					            <p class="p4">
+					            <textarea rows="" cols="60"></textarea>
+					            <input idx="${v.num}" type="button"  value="등록" name="reply"  class="action">
+					            </p>
+					            
+					        </div>
+					      </div>
+					    </div>`
+				  })//$.each 끝
+				  code += ` </div>
+					  </div>`;
+					  
+					$('#boardList').html(code);	 
+					
+					//페이지 번호출력하기
+					pagecontroll = pageList(result.startp, result.endp, result.totalp); 
+					$('#pageList').html(pagecontroll);
+		  },	//success
+		  error : function(xhr){
+			  alert("상태: "+xhr.status)
+		  },
+		  dataType : 'json'
+	  })//ajax
+	
+}//listPage
+
+pageList = function(sp, ep , tp){
+	pager = `<ul class="pagination">`;
+	//이전 버튼 생성
+	if(sp>1) {
+		pager += `<li class="page-item"><a class="page-link prev" href="#">Previous</a></li>`;
+	}
+	
+	//페이지번호 생성
+	
+	//currentPage = 9: 마지막페이지의 마지막데이터가 지워질 때 
+	//새로 계산해서 가져온 tp =8인상태
+	if(currentPage>tp) currentPage = tp;
+	
+	for(i=sp; i<=ep; i++){
+		if(i==currentPage){
+			pager += `<li class="page-item active"><a class="page-link pnum" href="#">${i}</a></li>`;	
+		} else{
+			pager += `<li class="page-item"><a class="page-link pnum" href="#">${i}</a></li>`;	
+		}
+	}
+	
+	//다음 버튼 생성
+	if(tp > ep){
+		pager += `<li class="page-item"><a class="page-link next" href="#">Next</a></li>`;
+	}
+	
+		pager += `</ul>`
+	
+	return pager;
+	
+}
+	
+	
+	

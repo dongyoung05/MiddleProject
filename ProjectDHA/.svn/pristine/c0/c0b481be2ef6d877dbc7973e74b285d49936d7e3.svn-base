@@ -1,0 +1,201 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Salon Reserve</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+tr{
+	text-align: center;
+}
+
+th{
+	width: 400px;
+	height: 80px;
+}
+
+.restd{
+	width: 100px;
+	height: 30px;
+}
+
+.reserve:hover{
+	color: blue;
+}
+
+.hr{
+	border: 1px solid black;
+	width: 20%;
+	height: 0px;
+	margin: 0 auto 50px auto;
+}
+
+#reserveMem{
+	width: 50%;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#profileImg{
+	width: 50%;
+	height: 50%;
+}
+
+#reserveInfo{
+	text-align: left;
+}
+</style>
+
+
+<%
+// 여기는 Session 객체로 로그인 정보 받아올 곳
+// 로그인 정보가 있냐 없냐에 따라 명함에 버튼, 프로필, 인삿말 변경되야함
+
+String imgPath = "../images/main";
+MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+
+%>
+
+
+<script>
+
+$(function(){
+	
+	$('#chkdate, input[name=weight]').on('change', function(){
+		
+		date = $('#chkdate').val();
+		
+		// 소중대 데이터 가져오기
+		weight = $('input[name=weight]:checked').val();
+		
+		if(date != ""){
+			// 테이블 날짜 변경
+			$('#datetime').text(date);
+			
+			$.getJSON(
+				"<%= request.getContextPath()%>/reserve/checkReserve.do",
+				{'date' : date, 'weight' : weight},
+				function(res){
+					
+					td = $('.restd').get();
+					
+					$.each(res, function(i, v){
+						let code = "";
+						if(v == "예약불가능") {
+							$(td[i]).css('color', 'red');
+							code += v;
+						} else{
+							$(td[i]).css('color', 'black');
+							code += "<span class='reserve'>" + v + "</span>";
+						}
+						$(td[i]).html(code);
+					})
+				}
+			)
+		}
+		
+	})
+	
+	
+	// 예약 가능 span태그 reserve클래스 태그 클릭 했을 때
+	$(document).on('click', '.reserve', function(){
+		
+		time = $(this).parent().prev().text().substr(0, 5);
+		alert(date + "," + time + "," + weight);
+		
+		$.getJSON(
+			"<%= request.getContextPath()%>/reserve/salonReserve.do",
+			{'date' : date, 'time' : time, 'weight' : weight},
+			function(res){
+				
+				alert('success');
+			}
+		)
+	})
+})
+
+</script>
+
+
+</head>
+<body>
+
+<!-- 
+	로그인 하면 예약시 필요한 요소와 함께 프로필 등장
+	로그인 안했을 시는 로그인 필요하다는 말과 로그인 페이지로 이동하는 버튼 출력
+ -->
+<%
+if(memberVo != null){
+%>
+<div id="reserveMem">
+	
+	<h3>예약자 프로필</h3>
+	<div class="hr" style="margin-bottom: 50px;"></div>
+	
+	<img id="profileImg" src="<%= request.getContentLength() %>/images/member/<%=memberVo.getMem_img() %>" alt="대충회원프로필1.png">
+	
+	<div id="reserveInfo">
+		
+		<h4><span style="width: 150px;">이름:</span> <%= memberVo.getMem_name() %></h4>
+		<h4><span style="width: 150px;">ID:</span> <%= memberVo.getMem_id() %></h4>
+		
+	</div>
+	
+</div>
+<%
+} else{
+%>
+<div>
+	<h3>로그인이 필요한 기능입니다.</h3>
+	
+	<a href="<%= request.getContextPath() %>/member/LoginMember.jsp">로그인</a>
+	<a href="<%= request.getContextPath() %>/member/InsertMember.jsp">회원가입</a>
+</div>
+<%	
+}
+%>
+
+
+
+<form action="#" method="post">
+	
+	<!-- 소형은 1시간 중형은 2시간 대형은 4시간 -->
+	소형견<input type="radio" name="weight" value="small" checked="checked">
+	중형견<input type="radio" name="weight" value="medium">
+	대형견<input type="radio" name="weight" value="big">
+	
+	<br>
+	
+	<input type="date" name="date" id="chkdate">
+	
+	<table border="1">
+		<tr>
+			<th colspan="3" id="datetime">날짜를 선택하세요.</th>
+		</tr>
+		
+		<tr><td>10:00 - 10:59</td><td class="restd"></td><tr>
+		<tr><td>11:00 - 11:59</td><td class="restd"></td><tr>
+		<tr><td>12:00 - 12:59</td><td class="restd"></td><tr>
+		<tr><td>13:00 - 13:59</td><td class="restd"></td><tr>
+		<tr><td>14:00 - 14:59</td><td class="restd"></td><tr>
+		<tr><td>15:00 - 15:59</td><td class="restd"></td><tr>
+		<tr><td>16:00 - 16:59</td><td class="restd"></td><tr>
+		<tr><td>17:00 - 17:59</td><td class="restd"></td><tr>
+		
+	</table>
+	
+	<input type="submit" value="test">
+</form>
+
+
+
+
+
+
+
+</body>
+</html>

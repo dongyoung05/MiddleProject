@@ -1,0 +1,95 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.List"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Sale</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/ProdPage.css">
+
+<script>
+	$(function(){
+		
+		//	등록 버튼
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		//	상품 상세보기
+		$('.description').on('click', function(){
+			prodNo = $(this).attr('idx');
+			location.href = `<%= request.getContextPath() %>/prod/getSelectProd.do?prodNo=${prodNo}`;
+		})
+		
+	})		//	$(function()) 종료
+	
+</script>
+</head>
+	<%
+	String prodImgPath = "../images/prod";
+	List<ProdVO> prodList = (List<ProdVO>)request.getAttribute("prodList");
+	%>
+<body>
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>
+	
+	<div id="container">
+	<!-- 상품 공통 검색창 출력 -->
+	<%@ include file="../prod/view/prodView.jsp" %>
+	
+		<div id="section">
+			<input type="button" value="등록" id="insertProd">
+			<h2>상품</h2>
+			<div class="hr"></div>
+			<div id="prod_container">
+			<%
+			if(prodList == null || prodList.isEmpty()){
+			%>
+				<div class="non-item">
+					<h4>상품에 대한 정보가 없습니다.</h4>
+				</div>
+			<%
+			} else {
+			%>
+				<%
+				for(ProdVO prod : prodList) {
+				%>
+					<div class="item">
+						<div class="thumbnail">
+							<img alt="<%= prod.getProd_img() %>" src="<%= prodImgPath %>/<%= prod.getProd_img()%>">
+						</div>
+						<div class="description" idx="<%= prod.getProd_no() %>">
+							<p class="prod_name"><%= prod.getProd_name() %></p>
+							<p class="prod_price"><%= prod.getProd_price() %></p>
+						</div>
+					</div>
+				<%
+				}
+				%>
+			<%
+			}
+			%>
+			</div>
+		</div>
+	</div>
+	
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+	
+</body>
+</html>

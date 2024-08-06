@@ -1,0 +1,15 @@
+package kr.or.ddit.dao.payment;
+
+import java.util.HashMap;
+
+public interface IPaymentDao {
+	
+	
+	public int insertReserveOrder(String reserveNo);
+	
+	
+	public int insertReservePayment(HashMap<String, Object> param);
+	
+	
+	
+}

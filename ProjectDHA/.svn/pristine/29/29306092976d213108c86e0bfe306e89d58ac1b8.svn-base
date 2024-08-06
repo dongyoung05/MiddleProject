@@ -1,0 +1,53 @@
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<%@ include file="../view/adminView.jsp" %>	
+<%
+	NoticeVO noticeVo = (NoticeVO)request.getAttribute("noticeVo");
+%>
+<body>
+<script type="text/javascript">
+
+$(function(){
+	
+	$('#cancel').click(function(){
+		location.href = "<%=request.getContextPath()%>/noticeDetailAdmin.do?notice_no=<%=noticeVo.getNotice_no()%>";
+	})
+		
+})
+	
+</script>
+<form action="<%= request.getContextPath() %>/noticeUpdateAdmin.do?notice_no=<%=noticeVo.getNotice_no()%>" method="post" enctype="multipart/form-data">
+		<table border="1">
+			<tr>
+				<td>제목</td>
+				<td><input type="text" id="notice_title" name="notice_title" value="<%=noticeVo.getNotice_title() %>"></td>
+			</tr>
+			
+			<tr>
+				<td>이미지</td>
+				<td><input type="file" id="notice_img" name="notice_img" value="<%=noticeVo.getNotice_img()%>"></td>
+			</tr>
+			
+			<tr>
+				<td>내용</td>
+				<td><textarea rows="10" cols="40"  id="notice_content" name="notice_content"><%=noticeVo.getNotice_content() %></textarea></td>
+			</tr>
+			
+			<tr>
+				<td style="text-align: center;" colspan="2">
+					<button type="submit">수정</button>
+					<input type="button" name="취소" value="취소" id="cancel">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

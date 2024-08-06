@@ -1,0 +1,98 @@
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<style>
+
+table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        background-color: #808080;
+        color: #fff;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    .buttons {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    #notice_noticeList {
+    	background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+</style>    
+<body>
+	<%
+  		
+		NoticeVO noticeVo = (NoticeVO)request.getAttribute("noticeVo");
+  	%>
+  	
+<script>
+$(function(){
+	$('#notice_noticeList').click(function(){
+		location.href="<%= request.getContextPath()%>/noticeList.do";
+	})
+})
+
+</script>  	
+  	
+<div class="containaer">
+		<table border="1">
+			<tr>
+				<th colspan="2">제목</th>
+			</tr>
+			<tr>
+				<td colspan="2"><%=noticeVo.getNotice_title()%></td>
+			</tr>
+			<tr>
+				<th>작성일자</th>
+				<td><%=noticeVo.getNotice_date()%></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2" >
+					<img id="notice_img" src="../images/notice/<%= noticeVo.getNotice_no() %>">
+				</td>
+			</tr>
+			
+			<tr>
+				<td id="cont" colspan="2"><%=noticeVo.getNotice_content()%></td>
+			</tr>
+			
+			
+		</table>
+		
+		 <div class="buttons">
+        	<input type="button" id="notice_noticeList" value="게시글목록">
+    	</div>
+	</div>
+	
+</body>
+</html>

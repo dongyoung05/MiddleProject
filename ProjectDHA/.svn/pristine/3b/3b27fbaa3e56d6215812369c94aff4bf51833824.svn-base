@@ -1,0 +1,46 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%
+	MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+	DogVO dogVo = (DogVO)request.getAttribute("dogvo");
+	
+	if(memberVo == null){
+%>
+		<script type="text/javascript">
+			alert('로그인후 조회 가능합니다.');
+			location.href = "/main/main.jsp";
+		</script>
+<%		
+	}
+%>
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script>
+	$(function(){
+		$('#updateBtn').click(function(){
+			
+			location.href = "dogUpdate.jsp";
+		})
+	})
+</script>
+
+
+</head>
+
+<body>
+<h1>조회한 반려견 상세정보</h1>
+<h1><%=dogVo.getDog_name() %></h1>
+<h1><%=dogVo.getDog_gender() %></h1>
+<h1><%=dogVo.getDog_breed() %></h1>
+<h1><%=dogVo.getDog_weight() %></h1>
+<h1><%=dogVo.getDog_birth() %></h1>
+<h1><%=dogVo.getDog_img() %></h1>
+<input type="button" value="반려견 정보 수정" id="updateBtn">
+</body>
+</html>

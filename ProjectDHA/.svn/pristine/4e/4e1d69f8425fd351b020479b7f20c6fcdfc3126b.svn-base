@@ -1,0 +1,79 @@
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        background-color: #808080;
+        color: #fff;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    td {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+</style>
+</head>
+<%@ include file="../view/adminView.jsp" %>	
+<body>
+
+
+<%
+	List<MemberVO> memList = (List<MemberVO>)request.getAttribute("memList");
+%>
+<script type="text/javascript">
+$(function(){
+	// 전역변수 설정
+
+    var path = '<%=request.getContextPath()%>';
+    
+    $('#memberTable').on('click', 'tr', function() {
+        var mem_id = $(this).find('.mem_id').text();
+        location.href = path + '/memberSelectAdmin.do?mem_id=' + mem_id;
+    });
+    $('#blackList').click(function(){
+    	location.href= path + '/memberBlackList.do';
+    })
+	
+		
+})
+</script>
+<h1 style="text-align: center;">회원 목록</h1>
+<table border="1" id="memberTable" class="table table-striped">
+	<tr>
+		<th>회원 ID</th>
+		<th>회원 명</th>
+		<th>회원 메일</th>
+		<th>전화 번호</th>
+		<th>회원 생일</th>
+	</tr>
+	<%for(MemberVO memberVo : memList) {%>
+		<tr>
+			<td class="mem_id"><%=memberVo.getMem_id() %></td>
+			<td><%=memberVo.getMem_name() %></td>
+			<td><%=memberVo.getMem_email() %></td>
+			<td><%=memberVo.getMem_tel() %></td>
+			<td><%=memberVo.getMem_bir() %></td>
+		</tr>
+	<%}%>
+</table>
+<br>
+<input type="button" value="블랙리스트 목록" id="blackList">
+</body>
+</html>

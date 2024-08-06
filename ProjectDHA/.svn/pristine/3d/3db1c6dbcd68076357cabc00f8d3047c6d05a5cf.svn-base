@@ -1,0 +1,123 @@
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<%@ include file="/view/MypageView.jsp" %>
+<%
+	
+String dog_name = request.getParameter("dog_name");
+String dog_breed = request.getParameter("dog_breed");
+int dog_no = Integer.parseInt(request.getParameter("dog_no"));
+
+	
+
+%>
+
+<style>
+  body {
+        font-family: Arial, sans-serif;
+        background-color: ;
+        margin: 0;
+        padding: 0;
+    }
+
+    #ff {
+        max-width: 400px;
+        margin: 100px auto; /* 화면 중앙 정렬 */
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #ff input[type="text"],
+    #ff input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    #ff input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    #ff select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    #ff input[type="button"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #ff input[type="button"]:hover {
+        background-color: #45a049;
+    }
+     #ff input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #ff input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<div id="sec">
+	<form id="ff" action="/ProjectDHA/dogUpdate.do?&dog_no=<%=dog_no %>&mem_id=<%=memberVo.getMem_id() %>" method="post" enctype="multipart/form-data"  >
+		<h1 style="text-align: center;">반려견 정보 변경</h1>
+		<label></label><input type="text" placeholder="반려견 이름을 입력하세요" name="dog_name" value="<%=dog_name%>"><br>
+		<label></label><input type="text" placeholder="반려견 종을 입력하세요" name="dog_breed" value="<%=dog_breed%>"><br>
+		<label>성별</label> <select name = "dog_gender">
+							    <option>남</option>
+							    <option>여</option>
+		  				   </select><br>
+
+		<label>생일</label> <input type="date"  name="dog_birth"><br>
+		<label>체급</label> <select name = "dog_weight">
+									<option>소형</option>
+							    	<option>중형</option>
+							    	<option>대형</option>
+		                  </select><br><br>
+		
+		<label>이미지</label><input type="file" name="dog_img"><br>
+		<br>
+		<input type='submit' value='수정'>
+		
+	
+	</form>
+</div>
+</body>
+</html>

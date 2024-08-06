@@ -1,0 +1,66 @@
+package kr.or.ddit.controller.board;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.service.board.IBoardService;
+import kr.or.ddit.vo.BoardVO;
+
+/**
+ * Servlet implementation class BoardUpdate
+ */
+@WebServlet("/boardUpdate.do")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 50, // 10mb 로 설정하고 싶을 때
+maxFileSize = 1024 * 1024 * 50, maxRequestSize = 1024 * 1024 * 100)
+public class BoardUpdate extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//받아오는 데이터 인코딩
+		request.setCharacterEncoding("utf-8");
+		
+		String board_no = request.getParameter("board_no"); 
+		System.out.println(board_no + "update@!!@!#!@#!@#!@#");
+		//서비스 객체 얻기 
+		IBoardService service = BoardServiceImpl.getInstance();
+		
+		//가져온 데이터를 담을 VO객체
+		BoardVO boardVo = new BoardVO();
+		
+		try {
+			BeanUtils.populate(boardVo, request.getParameterMap());
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		//System.out.println(boardVo + "    <== update!@#!@#!$!");
+		
+		boardVo.setBoard_no(board_no);
+		service.updateBoard(boardVo);
+					
+		//System.out.println(boardVo + "    <== updateAfter1231233!@#!@#!$!");
+		System.out.println("board_no: " + board_no);
+		
+		//서비스 메소드 호출 -결과값 가져오기
+		request.setAttribute("board_no", board_no);
+		
+		//뷰페이지로 이동
+		request.getRequestDispatcher("boardDetail.do").forward(request, response);
+				
+	}
+
+}

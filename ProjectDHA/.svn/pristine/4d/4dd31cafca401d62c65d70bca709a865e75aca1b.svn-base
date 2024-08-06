@@ -1,0 +1,67 @@
+<%@page import="kr.or.ddit.vo.CartVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cart Main</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../css/CartPage.css">
+<%
+	CartVO cartVo = (CartVO)session.getAttribute("cart");
+%>
+<script>
+	$(function(){
+		
+		$.ajax({
+			url : `<%= request.getContextPath() %>/cart/getCartProd.do`,
+			type : "post",
+			success : function(result){
+				code = "";
+				if(!result){
+					code += `<div class="cartProd">
+								<p id="noList">장바구니에 상품이 없습니다.</p>
+							 </div>`
+				} else {
+					$.each(result, function(i, v){
+						code += `<div class="cartProd">
+									<table>
+										<tr>
+											<td class="prodMiniImg" rowspan="2"></td>
+											<td class="prodMiniDesc">
+												<p>v.cartName
+												</p>
+											</td>
+					})	//	$.each 종료
+					
+				}
+				
+				$('#section').html(code);
+			},
+			error : function(xhr){
+				alert("상태 : " + xhr.status);
+			}
+		})
+	})		//	$(function()) 종료
+</script>
+<style>
+
+</style>
+</head>
+<body>
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>
+	
+	<div id="side">
+		<div id="cartMain"><span>장바구니</span></div>
+	</div>
+	
+	<div class="full-hr"></div>
+	
+	<div id="section">
+	</div>
+	
+</body>
+</html>

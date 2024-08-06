@@ -1,0 +1,30 @@
+package kr.or.ddit.service.payment;
+
+import java.util.HashMap;
+import java.util.List;
+
+public interface IPaymentService {
+	
+	public int insertReserveOrder(String reserveNo);
+	
+	public int insertReservePayment(HashMap<String, Object> param);
+	
+	/**
+	 * 결제하기를 누른 장바구니에 대한 정보를 주문 테이블로 넘기는 메서드
+	 * @param cartNo : 결제하고자 하는 장바구니 번호
+	 * @return 작업 성공 : 1, 작업 실패 : 0
+	 */
+	public int insertProdOrder(String cartNo);
+	
+	/**
+	 * 결제에 성공한 주문 내역을 결제 테이블로 넘기는 메서드
+	 * @param param : 주문 내역과 결제 금액이 담긴 Map 객체
+	 * @return 작업 성공 : 1, 작업 실패 : 0
+	 */
+	public int insertProdPayment(HashMap<String, Object> param);
+	
+	
+	public List<HashMap<String, Object>> getMyProdPayment(String mem_id);
+	public List<HashMap<String, Object>> getMyServicePayment(String mem_id);
+
+}

@@ -1,0 +1,75 @@
+package kr.or.ddit.service.board;
+
+import java.util.List;
+
+import kr.or.ddit.dao.board.BoardDaoImpl;
+import kr.or.ddit.dao.board.IBoardDao;
+import kr.or.ddit.vo.BoardVO;
+
+public class BoardServiceImpl implements IBoardService {
+	private IBoardDao dao;
+	
+	private static BoardServiceImpl service;
+
+	private BoardServiceImpl() {
+		dao = BoardDaoImpl.getInstance();
+	}
+
+	public static BoardServiceImpl getInstance() {
+		if (service == null) {
+			service = new BoardServiceImpl();
+		}
+		return service;
+	}
+
+	
+
+	@Override
+	public List<BoardVO> boardPrintAll() {
+		// TODO Auto-generated method stub
+		return dao.boardPrintAll();
+	}
+
+	@Override
+	public int insertBoard(BoardVO boardVo) {
+		// TODO Auto-generated method stub
+		return dao.insertBoard(boardVo);
+	}
+
+	@Override
+	public int updateBoard(BoardVO boardVo) {
+		// TODO Auto-generated method stub
+		return dao.updateBoard(boardVo);
+	}
+
+	@Override
+	public int deleteBoard(int boardNo) {
+		// TODO Auto-generated method stub
+		return dao.deleteBoard(boardNo);
+	}
+
+	@Override
+	public List<BoardVO> searchBoardbyTitle(String title) {
+		// TODO Auto-generated method stub
+		return dao.searchBoardbyTitle(title);
+	}
+
+	@Override
+	public List<BoardVO> searchBoardbyId(String memId) {
+		// TODO Auto-generated method stub
+		return dao.searchBoardbyId(memId);
+	}
+
+	@Override
+	public BoardVO viewBoard(int boardNo) {
+		// TODO Auto-generated method stub
+		return dao.viewBoard(boardNo);
+	}
+
+	@Override
+	public int viewUpdate(int boardNo) {
+		// TODO Auto-generated method stub
+		return dao.viewUpdate(boardNo);
+	}
+
+}

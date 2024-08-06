@@ -1,0 +1,77 @@
+package kr.or.ddit.controller.salon;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import kr.or.ddit.service.reserve.IReserveService;
+import kr.or.ddit.service.reserve.ReserveServiceImpl;
+import kr.or.ddit.vo.ReserveVO;
+
+/**
+ * Servlet implementation class SalonReserve
+ */
+@WebServlet("/salonReserve.do")
+public class SalonReserve extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		
+		IReserveService service = ReserveServiceImpl.getInstance();
+		
+		List<ReserveVO> reList = service.getSalonReserveList();
+		System.out.println(reList);
+		
+		PrintWriter out = response.getWriter();
+		
+		out.println("<html><head><meta charset='UTF-8'><title>Test</title></head>");
+		out.println("<body>"); 
+		out.println("<table border='1'>");
+		out.println("<tr><th>re_no</th><th>re_in</th><th>re_out</th></tr>");
+		
+		for(ReserveVO reser : reList) {
+			out.println("<tr>");
+			out.println("<td>" + reser.getReserve_no() + "</td>");
+			out.println("<td>" + reser.getReserve_in() + "</td>");
+			out.println("<td>" + reser.getReserve_out() + "</td>");
+			out.println("</tr>");
+		}
+		
+		
+		out.println("</body>");
+		
+		
+		
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

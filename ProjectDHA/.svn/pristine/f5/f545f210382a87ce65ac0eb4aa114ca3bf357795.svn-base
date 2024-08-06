@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+<style>
+.company{
+	display: flex;
+	justify-content: space-around;
+}
+
+.hr2{
+	width: 75%;
+	border: 1px solid black;
+	display: block;
+	margin: 0px auto 0px auto;
+}
+
+.low{
+	width: 0px;
+	height: 70px;
+	border: 1px solid black;
+	margin: 0 auto;
+}
+
+.team{
+	border: 3px solid black;
+	border-radius: 10px;
+	width: 180px;
+	height: 60px;
+	text-align: center;
+}
+
+.member{
+	text-align: center;
+	border-radius: 10px;
+	border: 2px solid black;
+	margin-top: 30px;
+}
+
+.member h4{
+	margin: 30px 0px 30px 0px;
+}
+
+#ceo{
+	border: 3px solid black;
+	border-radius: 50%;
+	margin: 0 auto;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+}
+
+#ceo h2{
+	margin-top: 35px;
+}
+</style>
+
+
+</head>
+<body>
+
+
+<div class="company">
+	<div id="ceo">
+		<h2>대표</h2>
+	</div>
+</div>
+<div class="low"></div>
+
+
+<!-- 밑 줄 -->
+<div class="company">
+	<div class="hr2"></div>
+</div>
+
+
+
+<div class="company">
+	
+	<div>
+		<div class="low"></div>
+		<div class="team"><h3>호텔 관리팀</h3></div>
+		<div class="member">
+			<h4>식사 담당</h4>
+			<h4>산책 담당</h4>
+		</div>
+	</div>
+	
+	<div>
+		<div class="low"></div>
+		<div class="team"><h3>미용&목욕팀</h3></div>
+		<div class="member">
+			<h4>미용 담당</h4>
+			<h4>목욕 담당</h4>
+		</div>
+	</div>
+	
+	<div>
+		<div class="low"></div>
+		<div class="team"><h3>상품관리팀</h3></div>
+		<div class="member">
+			<h4>배송 담당</h4>
+			<h4>상품기획 담당</h4>
+			<h4>상품등록 담당</h4>
+			<h4>시장조사 담당</h4>
+			<h4>제품 공급처 담당</h4>
+		</div>
+	</div>
+	
+	<div>
+		<div class="low"></div>
+		<div class="team"><h3>고객관리팀</h3></div>
+		<div class="member">
+			<h4>호텔고객 담당</h4>
+			<h4>미용고객 담당</h4>
+			<h4>상품고객 담당</h4>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

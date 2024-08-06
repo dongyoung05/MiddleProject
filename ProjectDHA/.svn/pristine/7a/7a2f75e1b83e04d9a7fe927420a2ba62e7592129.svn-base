@@ -1,0 +1,108 @@
+<%@page import="kr.or.ddit.vo.AdminVO"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>																								
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>
+<script src="<%=request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+<style>
+table {
+  		font-family: arial, sans-serif;
+  		border-collapse: collapse;
+  		width: 100%;
+	}
+
+	td, th {
+ 		 border: 1px solid #dddddd;
+  		 text-align: left;
+  		 padding: 8px;
+	}
+
+</style>
+  	<%
+  		AdminVO adminVo = (AdminVO)session.getAttribute("adminVo"); 
+		NoticeVO noticeVo = (NoticeVO)request.getAttribute("noticeVo");
+  	
+  		  		
+  		String imgPath = "../images/board";
+  	%>
+<script>
+  	$(function() {
+  		
+  		$('#notice_update').on('click',  function() {
+  			location.href="<%=request.getContextPath()%>/noticeDetail.do?notice_no=<%= noticeVo.getNotice_no()%>&trigger=Y";
+  		});
+  		
+  		$('#notice_delete').on('click',  function() {
+  			if(!confirm("해당 공지사항을 삭제하시겠습니까?")){
+  				location.href = "<%=request.getContextPath()%>/noticeDetail.do?notice_no=<%= noticeVo.getNotice_no()%>";
+  			} else {
+  				alert("정상적으로 삭제되었습니다.")
+  				location.href = "<%= request.getContextPath()%>/noticeDelete.do?notice_no=<%=noticeVo.getNotice_no()%>";
+  			}
+  		});
+  		
+  		
+  		$("#notice_boardlist").on('click', function(){
+  			location.href = "<%= request.getContextPath()%>/noticeList.do";
+  		})
+  		
+  		
+  		
+  	})//function
+  </script>
+</head>
+
+<body>
+<h2>공지사항 상세보기</h2>
+	<div class="containaer">
+		<table border="1">
+			<tr>
+				<td>제목</td>
+			</tr>
+			<tr>
+				<td><%=noticeVo.getNotice_title()%></td>
+			</tr>
+			<tr>
+				<td>작성일자</td>
+			</tr>
+			<tr>
+				<td><%=noticeVo.getNotice_date()%></td>
+			</tr>
+			<tr>
+				<td>
+					<img id="notice_img" alt="<%= noticeVo.getNotice_img() %>" src="<%= imgPath %>/<%= noticeVo.getNotice_img()%>">
+				</td>
+			</tr>
+			<tr>
+				<td>본문</td>
+			</tr>
+			<tr>
+				<td ><%=noticeVo.getNotice_content()%></td>
+			</tr>
+			
+			<tr>
+				<td >이미지</td>
+			</tr>
+			<tr>
+				<td >
+					<img id="notice_img" src="<%= request.getContextPath() %>/notice/noticeImageView.do?notice_no=<%= noticeVo.getNotice_no() %>">
+				</td>
+			</tr>
+		</table>
+		
+		 <div class="buttons">
+        	<input type="button" id="notice_update" value="수정">
+        	<input type="button" id="notice_delete" value="삭제">
+        	<input type="button" id="notice_boardlist" value="게시글목록">
+    	</div>
+	</div>
+</body>
+</html>

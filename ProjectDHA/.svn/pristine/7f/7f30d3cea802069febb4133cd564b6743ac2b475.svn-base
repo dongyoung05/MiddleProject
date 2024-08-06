@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="notice">
+	
+	<select id="printAllNotice" resultType="NoticeVo">
+		select * from notice
+		 where notice_delyn = 'N'  
+	</select>
+
+	<insert id="insertNotice" parameterType="NoticeVo">
+		insert into notice (notice_no, notice_title, notice_content, notice_date, notice_img, notice_delyn, admin_id)
+		values ('NOTI'|| lpad(notice_seq.nextval, 6, '0'),#{notice_title},#{notice_content},sysdate,#{notice_img},'N',#{admin_id})
+	</insert>
+	
+	<update id="updateNotice" parameterType="NoticeVo">
+		update notice 
+		   set notice_title = #{notice_title}
+		   ,   notice_content = #{notice_content}
+		   ,   notice_img = #{notice_img}
+		   ,   notice_date = sysdate		          
+		 where notice_no = #{notice_no}
+		       
+	</update>
+	
+	<delete id="deleteNotice" parameterType="NoticeVo">
+		update notice 
+		   set notice_delyn = #{notice_delyn}
+		 where notice_no = #{notice_no}
+	</delete>
+	
+	<select id="searchNoticeByNotice_no" parameterType="String" resultType="NoticeVo">
+		select * 
+		  from notice
+		 where notice_no = #{notice_no}
+		   and notice_delyn = 'N'
+	</select>
+	
+</mapper>	

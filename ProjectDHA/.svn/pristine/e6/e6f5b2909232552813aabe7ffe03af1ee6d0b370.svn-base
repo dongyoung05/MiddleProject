@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script>
+	$(function(){
+		$('#findId').click(function(){
+			mem_email = $('#mem_email').val().trim();
+			mem_name = $('#mem_name').val().trim();
+			$.ajax({
+				url : `<%=request.getContextPath()%>/findId.do`,
+				data : {"mem_email" : mem_email , "mem_name" : mem_name},
+				dataType : 'json',
+				type : 'post',
+				success : function(res) {
+					alert(res.flag);
+					
+					location.href="LoginMember.jsp";
+				},
+				error : function(xhr){
+					alert('상태 : ' + xhr.status)
+				}
+				
+			})
+		})
+	})
+</script>
+<body>
+
+	<form id="ff">	
+		<input type="email" placeholder="가입한 이메일을 입력하세요" id="mem_email">
+		<input type="text" placeholder="가입한 회원의 이름을 입력하세요" id="mem_name">
+		<button type="submit" id="findId">전송</button>
+	</form>
+</body>
+</html>

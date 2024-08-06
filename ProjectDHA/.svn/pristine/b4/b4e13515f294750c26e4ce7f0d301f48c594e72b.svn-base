@@ -1,0 +1,153 @@
+package kr.or.ddit.dao.prod;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.ddit.util.MybatisUtil;
+import kr.or.ddit.vo.ProdVO;
+
+public class ProdDaoImpl implements IProdDao {
+	
+	private static ProdDaoImpl dao;
+	
+	private ProdDaoImpl() {	}
+	
+	public static ProdDaoImpl getInstance() {
+		if(dao == null) dao = new ProdDaoImpl();
+		return dao;
+	}
+
+	@Override
+	public List<ProdVO> getAllProd(String searchValue) {
+		SqlSession session = null;
+		List<ProdVO> prodList = new ArrayList<ProdVO>();
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			prodList = session.selectList("Prod.getAllProd" , searchValue);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return prodList;
+	}
+	
+	@Override
+	public List<ProdVO> getCtgryProd(String prod_ctgry_id) {
+		SqlSession session = null;
+		List<ProdVO> prodList = new ArrayList<ProdVO>();
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			prodList = session.selectList("Prod.getCtrgyProd", prod_ctgry_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return prodList;
+	}
+	
+	@Override
+	public List<ProdVO> searchCtgryProd(Map<String, String> parameterMap) {
+		SqlSession session = null;
+		List<ProdVO> prodList = new ArrayList<ProdVO>();
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			prodList = session.selectList("Prod.searchCtgryProd", parameterMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+				
+		return prodList;
+	}
+	
+	@Override
+	public ProdVO getSelectProd(String prod_no) {
+		SqlSession session = null;
+		ProdVO prodVo = new ProdVO();
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			prodVo = session.selectOne("Prod.getSelectProd", prod_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return prodVo;
+	}
+
+	@Override
+	public int insertProd(ProdVO prodVo) {
+		SqlSession session = null;
+		int cnt = 0;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			cnt = session.insert("Prod.insertProd", prodVo);
+			if(cnt > 0) session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return cnt;
+	}
+
+	@Override
+	public int modifyProd(ProdVO prodVo) {
+		SqlSession session = null;
+		int cnt = 0;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			cnt = session.update("Prod.modifyProd", prodVo);
+			if(cnt > 0) session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return cnt;
+	}
+
+	@Override
+	public int deleteProd(String prod_no) {
+		SqlSession session = null;
+		int cnt = 0;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			cnt = session.update("Prod.deleteProd", prod_no);
+			if(cnt > 0) session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return cnt;
+	}
+
+	@Override
+	public List<ProdVO> getAllCtgry() {
+		SqlSession session = null;
+		List<ProdVO> ctrgyList = new ArrayList<ProdVO>();
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			ctrgyList = session.selectList("Prod.getAllCtrgy");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session != null) session.close();
+		}
+		return ctrgyList;
+	}
+
+}

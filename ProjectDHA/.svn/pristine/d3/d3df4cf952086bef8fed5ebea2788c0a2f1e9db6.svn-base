@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+map{
+	width: 50%;
+	height: 50%;
+	margin : 0px auto;
+}
+
+#map img{
+	display: block;
+	margin : 0px auto;
+}
+
+h1, h2, h3, h4, h5{
+	text-align : center;
+}
+
+#bus1{
+	color : green;
+}
+
+#bus img{
+	width : 50px;
+	height : 50px;
+	display: block;
+	margin : 0px auto;
+}
+
+</style>
+
+
+</head>
+<body>
+
+<h1>대전 본사</h1>
+
+<div id="map">
+	<img  src="../images/intro/DHA 애견호텔 지도.png" alt="DHA 애견호텔 지도.png">
+	<h2>대전 중구 계룡로 846 3층 DHA애견호텔&nbsp[오류동 175-13]</h2>
+	<h4>TEL.042-222-8202 &nbsp &nbsp &nbsp FAX.042-222-8202</h4>
+	<br>
+</div>
+
+<hr> <br>
+
+<div id="bus">
+	<img src="../images/intro/버스 이미지.png" alt="버스 이미지.png">
+	<h3 id="bus1">시내버스</h3>
+	<h5>서대전네거리역4번출구역</h5>
+	<h4>101번</h4>
+	<h4>103번</h4>
+	<h4>607번</h4>
+</div>
+
+
+</body>
+</html>

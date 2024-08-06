@@ -1,0 +1,55 @@
+package kr.or.ddit.dao.salon;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.ddit.util.MybatisUtil;
+import kr.or.ddit.vo.SalonVo;
+
+public class SalonDaoImpl implements ISalonDao{
+	
+	private static ISalonDao dao;
+	
+	private SalonDaoImpl() {}
+	
+	public static ISalonDao getInstance() {
+		if(dao == null) dao = new SalonDaoImpl();
+		
+		return dao;
+	}
+
+	@Override
+	public SalonVo getSalon(String salon_no) {
+		SqlSession session = null;
+		SalonVo salon = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			salon = session.selectOne("Salon.getSalon", salon_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) try {session.close();} catch(Exception e) {}
+		}
+		
+		return salon;
+	}
+
+	@Override
+	public List<SalonVo> getSalonList() {
+		SqlSession session = null;
+		List<SalonVo> salonList = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			salonList = session.selectList("Room.getSalonList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) try {session.close();} catch(Exception e) {}
+		}
+		return salonList;
+	}
+	
+}

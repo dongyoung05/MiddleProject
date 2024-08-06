@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+
+table{
+	text-align : center;
+	margin-left : auto;
+	margin-right : auto;
+	
+	width : 100%;
+	border : 1px solid #444444;
+	border-collapse : collapse;
+}
+
+th, td{
+	border : 2px solid #444444;
+	padding : 10px;
+}
+
+h2{
+	text-align : center;
+}
+
+.threesteps{
+	float : left;
+	padding : 10px;
+	width : 33%;
+}
+
+img{
+	width: 100%;
+	height: 100%;
+}
+
+#step{
+	display: flex;
+	justify-content: space-around;
+}
+
+#step h3{
+	text-align: center;
+}
+
+
+</style>
+
+<script type="text/javascript">
+$(function(){
+	$.resize();
+	$(window).resize(function(){$.resize()});
+})
+
+$.resize = function(){
+	size = $('body').height() + 200;
+	console.log(size);
+	$('#section', parent.document).css('height', size);
+}
+</script>
+
+</head>
+<body>
+
+<div id="step">
+	<div class="threesteps">
+		<h3>소형기준 : 10kg미만</h3>
+		<div>
+			<img  src="../images/intro/똑순이.jpg" alt="똑순이.jpg">
+		</div>
+	</div>
+	
+	<div class="threesteps">
+		<h3>중형 기준 : 10~25kg미만</h3>
+		<div>
+			<img  src="../images/intro/보더콜리.jpg" alt="보더콜리.jpg">
+		</div>
+	</div>
+	
+	<div class="threesteps">
+		<h3>대형 기준 : 25kg이상</h3>
+		<div>
+			<img  src="../images/intro/사모예드.jpg" alt="사모예드.jpg">
+		</div>
+	</div>
+</div>
+
+<h2>Price List</h2>   
+
+<table border ="1">
+	<tr>
+		<th>♥</th> <th>소형견<br>(10kg미만)</th> <th>중형견<br>(10~25kg미만)</th> <th>대형견<br>(25kg이상)</th>
+	</tr>
+	
+	<tr>
+		<td>일반미용</td> <td>40,000\</td> <td>50,000\</td> <td>70,000\</td>
+	</tr>
+	
+	<tr>
+		<td>특별미용</td> <td>60,000\</td> <td>70,000\</td> <td>100,000\</td>
+	</tr>
+	
+	<tr>
+		<td>목욕</td> <td>30,000\</td> <td>60,000\</td> <td>150,000\</td>
+	</tr>
+
+</table>
+
+
+</body>
+</html>

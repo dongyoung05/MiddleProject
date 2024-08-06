@@ -1,0 +1,75 @@
+package kr.or.ddit.controller.member;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import kr.or.ddit.service.dog.DogServiceImpl;
+import kr.or.ddit.service.dog.IDogService;
+import kr.or.ddit.service.member.IMemberService;
+import kr.or.ddit.service.member.MemberServiceImpl;
+import kr.or.ddit.vo.DogVO;
+import kr.or.ddit.vo.MemberVO;
+
+// 로그인을 처리하는 서블릿
+@WebServlet("/loginMember.do")
+public class LoginMember extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+		String memId = request.getParameter("mem_id");
+		String memPass = request.getParameter("mem_pass");
+		
+		MemberVO paramvo = new MemberVO();
+		
+		paramvo.setMem_id(memId);
+		paramvo.setMem_pass(memPass);
+		
+		IMemberService service = MemberServiceImpl.getInstance();
+		
+		MemberVO memberVo = service.loginMember(paramvo);
+		
+		// 로그인 정보를 저장해줄 세션 생성
+		HttpSession session = request.getSession();
+		
+		IDogService service2 = DogServiceImpl.getInstance();
+		
+		List<DogVO> doglist = service2.selectAllDog(memId);
+		
+		
+		
+		
+		// 세션처리
+		if(memberVo != null) {
+			// 로그인 성공 - session에 정보를 저장
+			session.setAttribute("myDogList", doglist);
+			session.setAttribute("loginok", memberVo);
+			session.setAttribute("check", "true");
+		} else {
+			// 로그인 실패 -
+			session.setAttribute("check", "false");
+		}
+		
+		// 뷰페이지로 이동
+		request.getRequestDispatcher("/member/LoginMember.jsp").forward(request, response);
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}

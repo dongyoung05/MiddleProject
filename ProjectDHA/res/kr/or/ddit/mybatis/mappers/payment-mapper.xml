@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="Payment">
+	
+	<insert id="insertReserveOrder" parameterType="String">
+		insert into "ORDER"
+		values(FN_CREATE_ORDER_NO(SYSDATE, #{reserve_no}), null, #{reserve_no})
+	</insert>
+	
+	<insert id="insertReservePayment" parameterType="map">
+		insert into payment
+		values(FN_CREATE_ORDER_NO(SYSDATE, #{reserve_no}), #{price}, sysdate)
+	</insert>
+	
+	<insert id="insertProdOrder" parameterType="String">
+		insert into "ORDER"
+		values(FN_CREATE_ORDER_NO(SYSDATE, #{cart_no}), #{cart_no}, null)
+	</insert>
+	
+	<insert id="insertProdPayment" parameterType="map">
+		insert into payment
+		values(FN_CREATE_ORDER_NO(SYSDATE, #{cart_no}), #{price}, sysdate)
+	</insert>
+	
+	<select id="getMyProdPayment" parameterType="String" resultType="map">
+		select b.order_no, b.cart_no, a.prod_qty, c.prod_name, c.prod_price, e.pay_price, e.pay_date
+		from prodcart a, "ORDER" b, prod c, cart d, payment e
+		where a.prod_no = c.prod_no
+		and a.cart_no = d.cart_no
+		and b.order_no = e.order_no
+		and a.cart_no in (select b.cart_no from "ORDER"
+                  		  where b.reserve_no is null) 
+		and mem_id = #{mem_id}
+	</select>
+	
+	<select id="getMyServicePayment" parameterType="String" resultType="map">
+		select a.order_no, a.reserve_no, b.reserve_in, b.reserve_out, b.reserve_when, c.dog_name, d.pay_price
+		from "ORDER" a, reserve b, dog c, payment d
+		where a.reserve_no = b.reserve_no
+		and b.dog_no = c.dog_no
+		and a.order_no = d.order_no
+		and b.mem_id = #{mem_id}
+	</select>
+			
+</mapper>	
+
+
+
+
+
+
+
+
+

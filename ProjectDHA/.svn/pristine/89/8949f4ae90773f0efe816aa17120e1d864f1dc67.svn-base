@@ -1,0 +1,202 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>prodDetail</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/중분류페이지공통스타일.css">
+<style>
+	#section {
+		width : 100%;
+		display: flex;
+		justify-content: center;
+	}
+	#prod_container{
+		width : 80%;
+		height : 1000px;
+		border : 1px black solid;
+		display : flex;
+		justify-content : flex-start;
+	}
+	.asideImg .descInfo {
+		width : 45%;	
+	}
+	#prodImg {
+		width : 500px;
+		height : 500px;
+	}
+</style>
+<script>
+	$(function(){
+		//	로고 클릭시 홈으로
+		$('#logo').on('click', function(){
+			location.href="<%= request.getContextPath()%>/main/main.jsp";
+		})
+		
+		//	중분류 페이지 이동
+		$('#hotel_intro').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelIntro.jsp";
+		})
+		
+		//	호텔 예약 페이지 이동
+		$('#hotel_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelReserve.jsp";
+		})
+		
+		//	미용 예약 페이지 이동
+		$('#salon_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/salon/salonReserve.jsp";
+		})
+		
+		//	애견상품 판매 페이지 이동
+		$('#prod_sale').on('click', function(){
+			location.href="<%= request.getContextPath()%>/prod/getAllProd.do";
+		})
+		
+		//	문의사항 페이지 이동
+		$('#hotel_help').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelHelp.jsp";
+		})
+		
+		//	등록 버튼
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		$('.description').on('click', function(){
+			prodNo = $('.description').attr('idx');
+			location.href = "<%= request.getContextPath() %>/prod/getSelectProd.do?no=${prodNo}";
+		})
+	})
+	
+</script>
+</head>
+	<%
+		String imgPath = "../images/main";
+		String prodImgPath = "../images/prod";
+		MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+		ProdVO prod = (ProdVO)request.getAttribute("prodVo");
+	%>
+<body>
+
+	<div class="header">
+		<!-- 로고 이미지 - images폴더에서 사진 가져옴 -->
+		<img id="logo" src="<%= imgPath %>/DHA_logo3.png" alt="DHA_logo3.png">
+		<div id="profile" class="profile">
+			<%
+			if(memberVo == null){			
+			%>	
+			<img id="profileImg" src="<%= imgPath %>/대충회원프로필1.png" alt="대충회원프로필1.png">
+			<!-- 프로필 옆에 문구 + 밑에 버튼 2개 -->
+			<div id="profile_detail">
+				<!-- 이름 -->
+				<p>로그인이 필요합니다.</p>
+				<a href="<%= request.getContextPath() %>/member/LoginMember.jsp">로그인</a>
+				<a href="<%= request.getContextPath() %>/member/InsertMember.jsp">회원가입</a>
+			</div>	
+			<%
+			} else {
+			%>		
+			<img id="profileImg" src="../images/member/<%=memberVo.getMem_img() %>" alt="대충회원프로필1.png">
+			<div id="profile_detail">
+				<p><%=memberVo.getMem_name() %>님 반갑습니다.</p>	
+				<a href="<%= request.getContextPath() %>/member/mypageMember.jsp">마이페이지</a>
+				<a href="<%= request.getContextPath() %>/logoutMember.do">로그아웃</a>
+			</div>	
+			<% 
+			}
+			%>
+		</div>
+	</div>
+
+	<div class="nav">
+		
+		<div id="hotel_intro">
+			<h3>소개</h3>
+		</div>
+		
+		<div id="hotel_reserve">
+			<h3>호텔</h3>
+		</div>
+		
+		<div id="salon_reserve">
+			<h3>미용</h3>
+		</div>
+		
+		<div id="prod_sale">
+			<h3>상품</h3>
+		</div>
+		
+		<div id="hotel_help">
+			<h3>Q&A</h3>
+		</div>
+	
+	</div>
+	
+		<div id="container">
+		<div id="side">
+			<h3>애견 상품</h3>
+			<p class="ctrgyBar">사료</p>		
+			<p class="ctrgyBar">간식</p>		
+			<p class="ctrgyBar">의류</p>		
+			<p class="ctrgyBar">악세사리</p>		
+			<p class="ctrgyBar">위생용품</p>		
+			<p class="ctrgyBar">배변용품</p>		
+			<p class="ctrgyBar">목욕용품</p>		
+			<p class="ctrgyBar">산책용품</p>		
+			<p class="ctrgyBar">훈련용품</p>		
+			<p class="ctrgyBar">장난감</p>		
+		</div>
+		
+		<div id="section">
+			<div id="prod_container">
+				<div class="asideImg">
+					<img id="prodImg" alt="<%= prod.getProd_img() %>" src="<%= prodImgPath %>/<%= prod.getProd_img()%>">
+				</div>
+				<div class="descInfo">
+					<table border="1">
+						<tr>
+							<td><p class="key">상품명</p></td>
+							<td><p class="value"><%= prod.getProd_name() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">소개</p></td>
+							<td><p class="value"><%= prod.getProd_desc() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">가격</p></td>
+							<td><p class="value"><%= prod.getProd_price() %></p></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="button" id="modifyProd" value="수정">
+								<input type="button" id="" value="확인">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+	
+	
+</body>
+</html>

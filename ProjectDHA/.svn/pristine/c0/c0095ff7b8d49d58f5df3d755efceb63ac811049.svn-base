@@ -1,0 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+  <script src="<%= request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+  <script src="<%= request.getContextPath() %>/js/jquery.serializejson.min.js"></script>
+  <script type="text/javascript">
+  $(function(){
+  		$("#cancel").on('click', function(){
+		  location.href = "<%= request.getContextPath()%>/boardList_QUES.do";
+	  })
+
+	 })
+  </script>
+ 
+</head>
+<body>
+
+<form action="<%= request.getContextPath() %>/boardInsert.do" method="post" enctype="multipart/form-data">
+	<table border="1">
+		<tr>
+			<td>제목</td>
+			<td><input type="text" id="board_title" name="board_title"></td>
+		</tr>
+		
+		<tr>
+			<td>분류</td>
+			<td>
+				<select id="board_ctgry_no" name="board_ctgry_no">
+					<option value="QUES">문의</option>
+					<option value="ALER">신고</option>
+					<option value="PROD">상품 리뷰</option>
+					<option value="HOTE">호텔 리뷰</option>
+					<option value="SALO">미용 리뷰</option>
+				</select>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>이미지</td>
+			<td><input type="file" id="board_img" name="board_img"></td>
+		</tr>
+		
+		<tr>
+			<td>내용</td>
+			<td><textarea rows="10" cols="40"  id="board_content" name="board_content"></textarea></td>
+		</tr>
+		
+		<tr>
+			<td style="text-align: center;" colspan="2">
+				<button type="submit">등록</button>
+				<input type="button" name="취소" value="취소" id="cancel">
+			</td>
+		</tr>
+			
+	</table>
+</form>
+</body>
+</html>
+			

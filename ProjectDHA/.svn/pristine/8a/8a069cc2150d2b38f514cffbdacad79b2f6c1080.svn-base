@@ -1,0 +1,57 @@
+<%@page import="kr.or.ddit.vo.NoticeVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>]
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script src="<%= request.getContextPath() %>/js/공통스크립트.js"></script>
+	<%
+		NoticeVO noticeVo = (NoticeVO)request.getAttribute("noticeVo");
+	
+		String notice_no = (String)request.getAttribute("notice_no");
+	%>
+<script type="text/javascript">
+  $(function(){
+	  $("#cancel").on('click', function(){
+		  location.href = "<%=request.getContextPath()%>/noticeDetail.do?notice_no=<%= noticeVo.getNotice_no()%>";
+	  })
+	  
+	  $("#noticelist").on('click', function(){
+		  location.href = "<%= request.getContextPath()%>/noticeList.do";
+	  })
+ })
+</script>
+</head>
+<body>
+<h2>공지 수정하기</h2>
+	<form action="<%= request.getContextPath() %>/noticeUpdate.do?notice_no=<%=noticeVo.getNotice_no()%>" method="post" enctype="multipart/form-data">
+		<table border="1">
+			<tr>
+				<td>제목</td>
+				<td><input type="text" id="board_title" name="board_title" value="<%=noticeVo.getNotice_title() %>"></td>
+			</tr>
+			
+			<tr>
+				<td>이미지</td>
+				<td><input type="file" id="board_img" name="board_img" value="<%=noticeVo.getNotice_img()%>"></td>
+			</tr>
+			
+			<tr>
+				<td>내용</td>
+				<td><textarea rows="10" cols="40"  id="board_content" name="board_content"><%=noticeVo.getNotice_content() %></textarea></td>
+			</tr>
+			
+			<tr>
+				<td style="text-align: center;" colspan="2">
+					<button type="submit">수정</button>
+					<input type="button" name="취소" value="취소" id="cancel">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

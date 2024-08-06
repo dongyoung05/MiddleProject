@@ -1,0 +1,57 @@
+package kr.or.ddit.dao.room;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.ddit.util.MybatisUtil;
+import kr.or.ddit.vo.RoomVo;
+
+public class RoomDaoImpl implements IRoomDao{
+	
+	private static IRoomDao dao;
+	
+	private RoomDaoImpl() { }
+	
+	public static IRoomDao getInstance() {
+		if(dao == null) dao = new RoomDaoImpl();
+		
+		return dao;
+	}
+
+	@Override
+	public RoomVo getRoom(String room_no) {
+		SqlSession session = null;
+		RoomVo room = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			room = session.selectOne("Room.getRoom", room_no);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) try {session.close();} catch(Exception e) {}
+		}
+		return room;
+	}
+
+	@Override
+	public List<RoomVo> getRoomList() {
+		SqlSession session = null;
+		List<RoomVo> roomList = null;
+		
+		try {
+			session = MybatisUtil.getSqlSession();
+			roomList = session.selectList("Room.getRoomList");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(session!=null) try {session.close();} catch(Exception e) {}
+		}
+		return roomList;
+	}
+	
+	
+}

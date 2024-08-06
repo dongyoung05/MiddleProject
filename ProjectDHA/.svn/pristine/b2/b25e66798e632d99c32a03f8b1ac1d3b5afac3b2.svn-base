@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cart Main</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<!-- <link rel="stylesheet" href="../css/ProdPage.css"> -->
+<script>
+</script>
+</head>
+<body>
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="Cart">
+
+	<!-- 전체 상품 리스트를 가져오는 SQL문 -->
+	<select id="getAllProd" resultType="ProdVo">
+		select * from prod
+		where not prod_delyn = 'Y'
+		order by prod_no desc
+	</select>
+	
+	<!-- 선택한 상품의 정보를 가져오는 SQL문 -->
+	<select id="getSelectProd" parameterType="String" resultType="ProdVo">
+		select * from prod
+		 where not prod_delyn = 'Y'
+		   and prod_no = #{prod_no}
+	</select>
+	
+	<!-- 상품을 새로 등록하는 SQL문 -->
+	<insert id="insertProd" parameterType="ProdVo">
+		insert into prod(prod_no, prod_name, prod_desc, prod_size, prod_color, prod_img, prod_price, prod_delyn, prod_date, prod_ctgry_id)
+		values (fn_create_prod_no(sysdate), #{prod_name}, #{prod_desc}, #{prod_size}, #{prod_color}, #{prod_img}, #{prod_price}, 'N', sysdate, #{prod_ctgry_id} )
+	</insert>
+	
+	<!-- 등록 되어있는 상품의 정보를 수정하는 SQL문 -->
+	<update id="modifyProd" parameterType="ProdVo">
+		update prod
+		   set prod_name  = #{prod_name}
+		     , prod_desc  = #{prod_desc}
+		     , prod_size  = #{prod_size}
+		     , prod_color = #{prod_color}
+		     , prod_img   = #{prod_img}
+		     , prod_price = #{prod_price}
+		     , prod_ctgry_id = #{prod_ctgry_id}
+		 where prod_no = #{prod_no}
+	</update>
+	
+	<!-- 등록 된 상품을 삭제하는 SQL문 -->
+	<update id="deleteProd" parameterType="String">
+		update prod
+		   set prod_delyn = 'Y'
+		 where prod_no = #{prod_no}
+	</update>
+	
+	<!-- 삭제 된 상품을 되돌리는는 SQL문 -->
+	<update id="deleteResetProd" parameterType="String">
+		update prod
+		   set prod_delyn = 'N'
+		 where prod_no = #{prod_no}
+	</update>
+
+	<!-- 모든 상품분류명을 가져오는 SQL문 -->
+	<select id="getAllCtrgy" resultType="ProdVo">
+		select * from prod_category
+	</select>
+	
+</mapper>	

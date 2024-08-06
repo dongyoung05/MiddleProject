@@ -1,0 +1,14 @@
+package kr.or.ddit.dao.reserve;
+
+import java.util.List;
+
+import kr.or.ddit.vo.ReserveVO;
+
+public interface IReserveDao {
+	
+	
+	public List<ReserveVO> getReserveList();
+	
+	
+	public List<ReserveVO> getSalonReserveList();
+}

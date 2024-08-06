@@ -1,0 +1,33 @@
+package kr.or.ddit.dao.reserve;
+
+import java.util.HashMap;
+import java.util.List;
+
+import kr.or.ddit.vo.ReserveVO;
+
+public interface IReserveDao {
+	
+	public List<ReserveVO> getReserveList();
+	
+	public List<ReserveVO> getSalonReserveList();
+	
+	public int chkSalonReserveList(String date);
+	
+	public int insertSalonReserve(ReserveVO reserveVo);
+	
+	public int insertRoomReserve(ReserveVO reserveVo);
+	
+	public String getRoomReserveNo(ReserveVO reserveVo);
+	
+	public String getSalonReserveNo(ReserveVO reserveVo);
+	
+	public int cancelReserve(String no);
+	
+	//--------------------------
+	public List<HashMap<String, Object>> getMyPastRoomReserve(String mem_id);
+	public List<HashMap<String, Object>> getMyNewRoomReserve(String mem_id);
+	
+	public List<HashMap<String, Object>> getMyPastSalonReserve(String mem_id);
+	public List<HashMap<String, Object>> getMyNewSalonReserve(String mem_id);
+	//--------------------------
+}

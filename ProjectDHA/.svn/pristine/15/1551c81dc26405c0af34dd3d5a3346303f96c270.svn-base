@@ -1,0 +1,57 @@
+package kr.or.ddit.controller.board;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.service.board.IBoardService;
+import kr.or.ddit.vo.BoardVO;
+
+/**
+ * Servlet implementation class BoardInsert
+ */
+@WebServlet("/boardInsert.do")
+public class BoardInsert extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		
+		//전송데이터 받기 subaject, writer, image, content
+		
+		StringBuffer strbuf = new StringBuffer();
+		
+		String line = null;
+		
+		BufferedReader reader = request.getReader();
+		
+		while((line = reader.readLine()) != null) {
+			
+			strbuf.append(line);
+		}
+		
+		String data = String.valueOf(strbuf);
+		
+		//역직렬화
+		Gson gson = new Gson();
+		BoardVO boardVo = gson.fromJson(data, BoardVO.class); 
+		
+		//서비스 객체 언기
+		IBoardService service = BoardServiceImpl.getInstance();
+		//서비스 메소드 호출 -결과값 가져오기
+		int res = service.insertBoard(boardVo);
+		//결과값을 request에 저장
+		request.setAttribute("cnt", res);
+		//view페이지로 이동
+		request.getRequestDispatcher("/board/result.jsp").forward(request, response);
+	}
+
+}

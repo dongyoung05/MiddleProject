@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 이 문서는 myBatis의 환경 설정을 처리하는 문서입니다. -->
+<configuration>
+	<properties resource="kr/or/ddit/mybatis/config/dbinfo.properties" />
+		
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="kr.or.ddit.vo.DogVO" alias="DogVo" />
+		<typeAlias type="kr.or.ddit.vo.MemberVO" alias="MemberVo" />
+		<typeAlias type="kr.or.ddit.vo.BoardVO" alias="BoardVo" />
+		<typeAlias type="kr.or.ddit.vo.ProdVO" alias="ProdVo" />
+		<typeAlias type="kr.or.ddit.vo.CartVO" alias="CartVo" />
+		<typeAlias type="kr.or.ddit.vo.ProdCartVO" alias="ProdCartVo" />
+		<typeAlias type="kr.or.ddit.vo.ReserveVO" alias="ReserveVo" />
+		<typeAlias type="kr.or.ddit.vo.SalonVo" alias="SalonVo" />
+		<typeAlias type="kr.or.ddit.vo.RoomVo" alias="RoomVo" />
+		<typeAlias type="kr.or.ddit.vo.AdminVO" alias="AdminVo" />
+		<typeAlias type="kr.or.ddit.vo.NoticeVO" alias="NoticeVo" />
+		<typeAlias type="kr.or.ddit.vo.ReplyVO" alias="ReplyVo" />
+	</typeAliases>
+	
+	<environments default="oracleDev">
+		<environment id="oracleDev">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${id}"/>
+				<property name="password" value="${pass}"/>
+				<property name="poolMaximumActiveConnections" value="2"/><!-- 활성화된 최대 커넥션 수 -->
+				<property name="poolMaximumIdleConnections" value="2"/><!-- 유휴상태에서 최대 커넥션 수 -->
+			</dataSource>			
+		</environment>
+		
+	</environments>
+	
+	<mappers> 
+		<mapper resource="kr/or/ddit/mybatis/mappers/member-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/dog-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/board-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/prod-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/cart-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/prodcart-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/reserve-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/salon-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/room-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/admin-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/notice-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/reply-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/payment-mapper.xml"/>
+	</mappers>				
+			
+</configuration>	

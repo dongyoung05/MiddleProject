@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="ProdCart">
+
+	<insert id="insertProdCart" parameterType="ProdCartVo">
+		insert into prodcart(cart_no, prod_no, prod_qty)
+		values (#{cart_no}, #{prod_no}, #{prod_qty})
+	</insert>
+	
+	<select id="checkCartProd" parameterType="ProdCartVo" resultType="int">
+		select count(*) from prodcart
+		 where cart_no = #{cart_no}
+		   and prod_no = #{prod_no}
+	</select>
+	
+	<update id="duplicationCartProd" parameterType="ProdCartVo">
+		update prodcart
+		   set prod_qty = prod_qty + #{prod_qty}
+		 where cart_no = #{cart_no}
+		   and prod_no = #{prod_no}
+	</update>
+	
+	<select id="getAllProdCart" parameterType="String" resultType="ProdCartVo">
+		select * from prodcart
+		 where cart_no = #{cart_no}
+	</select>
+</mapper>

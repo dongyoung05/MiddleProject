@@ -1,0 +1,55 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<%
+	List<DogVO> dlist = (List<DogVO>)request.getAttribute("dlist");
+	MemberVO mvo = (MemberVO)request.getAttribute("mvo");
+	MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+
+%>
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#insertDog').click(function(){
+		location.href="dog/dogInsert.jsp?mem_id=<%=memberVo.getMem_id()%>";
+	})
+	$('#updateMember').click(function(){
+		location.href="member/UpdateMember.jsp";
+	})
+})
+
+</script>
+
+</head>
+<body>
+	<h1>Mypage..</h1>
+	<p>회원 ID : <%=mvo.getMem_id() %></p>
+	<p>회원 이름 : <%=mvo.getMem_name() %></p>
+	<p>회원 메일 : <%=mvo.getMem_email() %></p>
+	<p>회원 주소 : <%=mvo.getMem_add1() %></p>
+	<p>회원 생일 : <%=mvo.getMem_bir() %></p>
+	
+	<%
+		for(DogVO dogvo : dlist){
+	%>		
+		
+		<p>회원 반려견 : <img src= "../images/dog/<%=dogvo.getDog_img() %>"alt="반려견사진"></p>
+		<p>회원 반려견 : <%=dogvo.getDog_name() %></p>
+			
+	<%		
+		}
+	%>
+	
+		<input type="button" value="반려견등록" id="insertDog">
+		<br>
+		<input type="button" value="회원정보수정" id="updateMember">
+	
+</body>
+</html>

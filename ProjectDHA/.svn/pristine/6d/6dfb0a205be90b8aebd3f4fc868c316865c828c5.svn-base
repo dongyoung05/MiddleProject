@@ -1,0 +1,100 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mypage</title>
+
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/MainPage.css">
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/중분류페이지공통스타일.css">
+<style type="text/css">
+.dogImg{
+	width: 200px;
+	height: 200px;
+}
+   
+
+    .profile {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .profile p {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+<%@ include file="/view/MypageView.jsp" %>
+
+</head>
+
+	<div class="profile">
+			<h1>Mypage..</h1>
+			<div class="profile">
+			<p>회원 ID : <%=memberVo.getMem_id() %></p>
+			<p>회원 이름 : <%=memberVo.getMem_name() %></p>
+			<p>회원 메일 : <%=memberVo.getMem_email() %></p>
+			<p>회원 주소 : <%=memberVo.getMem_add1() %></p>
+			<p>회원 생일 : <%=memberVo.getMem_bir() %></p>
+			<div class="dogDiv">
+			<% 
+			for(DogVO dogvo : dlist){
+			%>		
+				
+				<img class="dogImg" src= "<%= request.getContextPath() %>/images/dog/<%=dogvo.getDog_img() %>" alt="<%=dogvo.getDog_img() %>" > 
+				회원 반려견 : <%=dogvo.getDog_name() %> 
+					
+			<%		 
+			}
+			%> 
+			</div>	
+				<input class="button" type="button" value="반려견등록" id="insertDog">
+				
+				<input class="button" type="button" value="회원정보수정" id="updateMember">
+			</div>
+	</div>
+		
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+	
+	
+	
+</body>
+</html>

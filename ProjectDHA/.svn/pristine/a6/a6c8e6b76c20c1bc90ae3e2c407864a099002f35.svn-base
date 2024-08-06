@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+/********** 공통 CSS **********/
+
+	div{ 
+		margin: 5px; 
+	 } 
+	
+	body{
+		padding: 1% 12% 1% 12%;
+	}
+	
+	.header{
+		display : flex;
+		text-align: center;
+	}
+	
+ 	.nav{
+ 		display: flex; 
+ 		justify-content: space-around;
+ 		padding: 5px 20% 5px 20%;
+ 		margin-bottom: 30px;
+ 	}
+	
+	#side, #section, #title{
+		text-align: center;
+	}
+	
+	#side{
+		border: 3px solid black;
+		border-radius: 15px;
+		display: flex;
+		justify-content: space-around;
+		padding: 0 25%;
+	}
+	
+	#side p{
+		width: 150px;
+	}
+	
+	#side p:hover{
+		font-weight: bold;
+	}
+	
+	#section{
+		height: 3200px; 
+	}
+	
+	iframe{
+		width: 100%;
+		height: 100%;
+		margin-top: 60px;
+		border: none;
+	}
+	
+	.footer{
+		height: 50px;
+		display: flex;
+		justify-content: space-around;
+	}
+	
+	.nav div{
+		border-radius: 10px;
+		width: 120px;
+		text-align: center;
+	}
+	
+	.nav div:hover{
+		color: gray;
+	}
+	
+	.hr{
+		border: 1px solid black;
+		width: 40%;
+		margin: 0 auto;
+	}
+	
+	#profile{
+		margin-left : auto;
+		display : flex;
+	}
+	
+	#profile_detail{
+		width : 200px;
+	}
+	
+	#profile_detail a{
+		margin-right: 10px;
+	}
+	
+	img{
+		width: 90%;
+		height: 90%;
+	}
+	
+	
+	#profileImg{
+		height: 70px;
+		width: 70px;
+		border: 2px solid black;
+		border-radius: 50%;
+		margin-top: 15px;
+	}
+	
+	#logo{
+		height: 100px;
+		width: 120px;
+		margin-left: 45%;
+	}
+
+
+/********** Cart Main (cartMain.jsp) **********/
+
+	#cartMain {
+		width: 150px;
+		height : 50px;
+		font-size : 24px;
+		font-weight : bold;
+		display : flex;
+		align-items : center;
+		justify-content : center; 
+	}
+
+	#section{
+		border : 2px solid black;
+		border-radius : 15px; 
+	}
+
+	.full-hr {
+		border: 1px solid black;
+		width: 95%;
+		margin: 20px auto;
+	}
+	
+	.semi-hr {
+		border: 1px solid black;
+		width: 95%;
+		margin: 5px auto;
+	}

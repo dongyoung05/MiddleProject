@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+<style>
+table{
+	text-align : center;
+	margin-left : auto;
+	margin-right : auto;
+	
+	width : 100%;
+	border : 1px solid #444444;
+	border-collapse : collapse;
+}
+
+th, td{
+	border : 2px solid #444444;
+	padding : 10px;
+}
+
+h2{
+	text-align : center;
+}
+
+.threesteps{
+	float : left;
+	padding : 10px;
+	width : 33%;
+}
+
+img{
+	width: 100%;
+	height: 100%;
+}
+
+#step{
+	display: flex;
+	justify-content: space-around;
+}
+
+#step h3{
+	text-align: center;
+}
+
+</style>
+
+<script>
+$(function(){
+	$.resize();
+	$(window).resize(function(){$.resize()});
+})
+
+$.resize = function(){
+	size = $('body').height() + 200;
+	console.log(size);
+	$('#section', parent.document).css('height', size);
+}
+</script>
+
+</head>
+<body>
+
+<div id="step">
+	<div class="threesteps">
+		<h3>하늘반</h3>
+		<div>
+			<img  src="../images/intro/애견호텔 내부.jpg" alt="애견호텔 내부.jpg">
+		</div>
+	</div>
+	
+	<div class="threesteps">
+		<h3>햇빛반</h3>
+		<div>
+			<img  src="../images/intro/애견호텔 중형.jpg" alt="애견호텔 중형.jpg">
+		</div>
+	</div>
+	
+	<div class="threesteps">
+		<h3>달빛반</h3>
+		<div>
+			<img  src="../images/intro/애견호텔 대형.jpg" alt="애견호텔 대형.jpg">
+		</div>
+	</div>
+</div>
+
+
+<h2>Price List</h2>
+
+<table>
+	<tr>
+		<th>낮 (10:00~18:00)<br>밤 (18:00~10:00)</th> <th>하늘반<br>(10kg미만)</th> <th>햇빛반<br>(10~25kg미만)</th> <th>달빛반<br>(25kg이상)</th>
+	</tr>
+	
+	<tr>
+		<td>24시간(산책O)</td> <td>55,000\</td> <td>59,000\</td> <td>63,000\</td>
+	</tr>
+	
+	<tr>
+		<td>낮or밤(산책O)</td> <td>25,000\</td> <td>29,000\</td> <td>33,000\</td>
+	</tr>
+	
+	<tr>
+		<td>24시간(산책X)</td> <td>50,000\</td> <td>53,000\</td> <td>56,000\</td>
+	</tr>
+	
+	<tr>
+		<td>낮or밤(산책X)</td> <td>20,000\</td> <td>23,000\</td> <td>26,000\</td>
+	</tr>
+</table>
+
+
+
+</body>
+</html>

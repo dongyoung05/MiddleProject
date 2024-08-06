@@ -1,0 +1,115 @@
+package kr.or.ddit.service.member;
+
+import java.util.List;
+
+import kr.or.ddit.dao.member.IMemberDao;
+import kr.or.ddit.dao.member.MemberDaoImpl;
+import kr.or.ddit.vo.MemberVO;
+
+public class MemberServiceImpl implements IMemberService {
+	// 싱글톤
+	private IMemberDao dao;
+	
+	private static IMemberService service;
+	
+	private MemberServiceImpl() {
+		dao = MemberDaoImpl.getInstance();
+	}
+	
+	public static IMemberService getInstance() {
+		if(service == null) service = new MemberServiceImpl(); 
+		return service;
+	}
+//================싱글톤 끝=================================================================	
+	
+	
+	@Override
+	public List<MemberVO> selectMemberList() {
+		
+		return dao.selectMemberList();
+	}
+
+	@Override
+	public int insertMember(MemberVO memberVo) {
+		
+		return dao.insertMember(memberVo);
+	}
+
+	@Override
+	public MemberVO selectGetMemberId(String mem_id) {
+		
+		return dao.selectGetMemberId(mem_id);
+	}
+
+	@Override
+	public int updateMember(MemberVO memberVo) {
+		
+		return dao.updateMember(memberVo);
+	}
+
+	@Override
+	public int delMember(String mem_id) {
+		
+		return dao.delMember(mem_id);
+	}
+	@Override
+	public int checkMemberId(String mem_id) {
+		
+		return dao.checkMemberId(mem_id);
+	}
+
+	@Override
+	public MemberVO loginMember(MemberVO memberVo) {
+		
+		return dao.loginMember(memberVo);
+	}
+
+	@Override
+	public String findId(MemberVO memberVo) {
+		// TODO Auto-generated method stub
+		return dao.findId(memberVo);
+	}
+
+	@Override
+	public MemberVO findPass(MemberVO memberVo) {
+		// TODO Auto-generated method stub
+		return dao.findPass(memberVo);
+	}
+
+	@Override
+	public List<MemberVO> blackListAll() {
+		// TODO Auto-generated method stub
+		return dao.blackListAll();
+	}
+
+	@Override
+	public MemberVO blackListSelect(String mem_id) {
+		// TODO Auto-generated method stub
+		return dao.blackListSelect(mem_id);
+	}
+
+	@Override
+	public int blackMemberInsert(MemberVO memberVo) {
+		// TODO Auto-generated method stub
+		return dao.blackMemberInsert(memberVo);
+	}
+
+	@Override
+	public int blackMemberDelete(String mem_id) {
+		// TODO Auto-generated method stub
+		return dao.blackMemberDelete(mem_id);
+	}
+
+	@Override
+	public MemberVO blacklistLogin(String mem_id) {
+		// TODO Auto-generated method stub
+		return dao.blacklistLogin(mem_id);
+	}
+
+	@Override
+	public MemberVO serachMember(String mem_name) {
+		// TODO Auto-generated method stub
+		return dao.serachMember(mem_name);
+	}
+
+}

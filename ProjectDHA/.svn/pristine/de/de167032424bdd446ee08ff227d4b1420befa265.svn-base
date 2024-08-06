@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 이 문서는 myBatis의 환경 설정을 처리하는 문서입니다. -->
+<configuration>
+	<properties resource="kr/or/ddit/mybatis/config/dbinfo.properties" />
+		
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="kr.or.ddit.vo.DogVO" alias="DogVo" />
+		<typeAlias type="kr.or.ddit.vo.MemberVO" alias="MemberVo" />
+		<typeAlias type="kr.or.ddit.vo.BoardVO" alias="BoardVo" />
+		<typeAlias type="kr.or.ddit.vo.ProdVO" alias="ProdVo" />
+		<typeAlias type="kr.or.ddit.vo.CartVO" alias="CartVo" />
+		<typeAlias type="kr.or.ddit.vo.ProdCartVO" alias="ProdCartVo" />
+		<typeAlias type="kr.or.ddit.vo.ReserveVO" alias="ReserveVo" />
+		<typeAlias type="kr.or.ddit.vo.SalonVo" alias="SalonVo" />
+	</typeAliases>
+	
+	<environments default="oracleDev">
+		<environment id="oracleDev">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${id}"/>
+				<property name="password" value="${pass}"/>
+			</dataSource>			
+		</environment>
+		
+	</environments>
+	
+	<mappers> 
+		<mapper resource="kr/or/ddit/mybatis/mappers/member-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/dog-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/board-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/prod-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/cart-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/prodcart-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/reserve-mapper.xml"/>
+		<mapper resource="kr/or/ddit/mybatis/mappers/salon-mapper.xml"/>
+	</mappers>				
+			
+</configuration>	

@@ -1,0 +1,15 @@
+package kr.or.ddit.dao.salon;
+
+import java.util.List;
+
+
+import kr.or.ddit.vo.SalonVo;
+
+public interface ISalonDao {
+	
+	public SalonVo getSalon(String salon_no);
+	
+	public List<SalonVo> getSalonList();
+
+	
+}

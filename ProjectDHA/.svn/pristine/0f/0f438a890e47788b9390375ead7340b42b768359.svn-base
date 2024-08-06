@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jquery-3.7.1.min.js"></script>
+
+<style>
+map{
+	width: 50%;
+	height: 50%;
+	margin : 0px auto;
+}
+
+#map img{
+	display: block;
+	margin : 0px auto;
+}
+
+h1{
+	text-align : center;
+}
+
+#bus1{
+	color : green;
+}
+
+#bus img{
+	width : 50px;
+	height : 50px;
+	display: inline-block;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+$(function(){
+	padding();
+	
+	$(window).resize(function() {
+		padding();
+	});
+})
+
+function padding(){
+	bodyWidth = $('body').width();
+	imgWidth = $('img').width();
+	paddingWidth = (bodyWidth - imgWidth) / 2 + 'px';
+	$('.pad').css('margin-left', paddingWidth);
+}
+</script>
+
+</head>
+<body>
+
+<h1>대전 본사</h1>
+
+<div id="map">
+	<img  src="../images/intro/DHA 애견호텔 지도.png" alt="DHA 애견호텔 지도.png">
+	<div class="pad">
+		<h2>대전 중구 계룡로 846 3층 DHA애견호텔&nbsp[오류동 175-13]</h2>
+		<h4>TEL.042-222-8202 &nbsp &nbsp &nbsp FAX.042-222-8202</h4>
+	</div>
+	<br>
+</div>
+
+<hr> <br>
+
+<div id="bus">
+	<div class="pad" style="display: flex;">
+		<div style="display: flex; margin-right: 60px; width:140px;">
+			<img src="../images/intro/버스 이미지.png" alt="버스 이미지.png" style="margin-top: 20px;">
+			<h3 id="bus1" style="margin: 30px 0 0 10px;">시내버스</h3>
+		</div>
+		<div>
+			<h4 style="margin-bottom: 0;">서대전네거리역4번출구역</h4>
+			<h4 style="margin-top: 5px;">101번, 103번, 607번</h4>
+		</div>
+	</div>
+	<div class="pad" style="display: flex;">
+		<div style="display: flex; margin-right: 60px; width:140px;">
+			<img src="../images/intro/버스 이미지.png" alt="버스 이미지.png" style="margin-top: 20px;">
+			<h3 id="bus1" style="margin: 30px 0 0 10px;">지하철</h3>
+		</div>
+		<div>
+			<h4 style="margin-bottom: 0;">서대전네거리역4번출구역</h4>
+			<h4 style="margin-top: 5px;">101번, 103번, 607번</h4>
+		</div>
+	</div>
+</div>
+
+<div>
+	
+</div>
+
+
+</body>
+</html>

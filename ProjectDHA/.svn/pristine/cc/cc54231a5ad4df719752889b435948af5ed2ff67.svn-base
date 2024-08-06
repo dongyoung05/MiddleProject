@@ -1,0 +1,15 @@
+package kr.or.ddit.service.payment;
+
+import java.util.HashMap;
+
+public interface IPaymentService {
+	
+	
+	public int insertReserveOrder(String reserveNo);
+	
+	
+	public int insertReservePayment(HashMap<String, Object> param);
+	
+	
+	
+}

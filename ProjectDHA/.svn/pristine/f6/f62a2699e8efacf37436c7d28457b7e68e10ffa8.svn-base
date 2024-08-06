@@ -1,0 +1,50 @@
+<%@page import="kr.or.ddit.vo.CartVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cart Main</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/cartScripts.js"></script>
+<script src="../js/공통스크립트.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/CartPage.css">
+<%
+ 	CartVO cartVo = (CartVO)session.getAttribute("cart");
+%>
+<script>
+	mypath = '<%= request.getContextPath() %>';
+	prodImgPath = "../images/prod";
+	
+	$(function(){
+		$.cartList().then(function(){		//	장바구니 목록 출력
+			$.cartInfo();
+		});
+	})
+</script>
+<style>
+
+</style>
+</head>
+<body>
+
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>
+<!-- 	<div id="side"> -->
+<!-- 		<div id="cartMain"><span>장바구니</span></div> -->
+<!-- 	</div> -->
+	<div class="full-hr"></div>
+	
+	<div id="cart_section">
+	</div>
+	<div class="backProd">
+    <button onclick="goToProductPage()">상품 페이지로 돌아가기</button>
+</div>
+
+
+</body>
+
+</html>

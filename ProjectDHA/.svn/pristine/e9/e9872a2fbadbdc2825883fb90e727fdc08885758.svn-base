@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="reserve">
+	
+	<select id="getReserveList" resultType="ReserveVo">
+		select * from reserve
+	</select>	
+		
+	<select id="getSalonReserveList" resultType="ReserveVo">
+		select * from reserve
+		where salon_no is not null
+	</select>	
+	
+	<select id="chkSalonReserveList" parameterType="String" resultType="int">
+		select count(*) from reserve
+		where To_TIMESTAMP(#{date}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+			  between RESERVE_IN and RESERVE_OUT
+		and room_no is null
+		and reserve_cancel = 'N'
+	</select>
+	
+	<insert id="insertSalonReserve" parameterType="ReserveVo">
+		insert into reserve
+		values(
+    		'sa-'||to_char(SALO_SEQ.nextval), 
+    		To_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+    		To_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+   	 		(select salon_price
+   	 		from salon 
+   	 		where salon_no = #{salon_no}),
+    		sysdate,
+    		'N',
+    		#{salon_no},
+    		null,
+    		#{dog_no},
+    		#{mem_id}
+		)
+	</insert>
+	
+	<insert id="insertRoomReserve" parameterType="ReserveVo">
+		insert into reserve
+		values(
+			'ro-'||to_char(HOTE_SEQ.nextval), 
+    		To_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+    		To_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+   	 		#{reserve_price},
+    		sysdate,
+    		'N',
+    		null,
+    		#{room_no},
+    		#{dog_no},
+    		#{mem_id}
+		)
+	</insert>
+	
+	<select id="getRoomReserveNo" resultType="String" parameterType="ReserveVo">
+		select reserve_no
+		from reserve
+		where reserve_in = TO_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+		and reserve_out = TO_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+		and room_no = #{room_no}
+		and mem_id = #{mem_id}
+		and dog_no = #{dog_no}
+		and reserve_cancel = 'N'
+	</select>
+	
+	<select id="getSalonReserveNo" resultType="String" parameterType="ReserveVo">
+		select reserve_no
+		from reserve
+		where reserve_in = TO_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+		and reserve_out = TO_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+		and salon_no = #{salon_no}
+		and mem_id = #{mem_id}
+		and dog_no = #{dog_no}
+		and reserve_cancel = 'N'
+	</select>
+	
+	<update id="cancelReserve" parameterType="String">
+		update reserve
+		set reserve_cancel = 'Y'
+		where reserve_no = #{reserve_no}
+	</update>
+	
+</mapper>	
+
+
+
+
+
+
+
+

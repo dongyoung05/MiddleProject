@@ -1,0 +1,164 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>prodDetail</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/공통스크립트.js"></script>
+<link rel="stylesheet" href="../css/MainPage.css">
+<link rel="stylesheet" href="../css/ProdPage.css">
+	<%
+		String prodImgPath = "../images/prod";
+		ProdVO prod = (ProdVO)request.getAttribute("prodVo");
+		ProdVO ctgry = (ProdVO)request.getAttribute("ctgryVo");
+		String prodNo = (String)request.getAttribute("prodNo");
+	%>
+</head>
+
+<body>
+
+	<!-- 공통 헤더 출력 -->
+	<%@ include file="../view/commonView.jsp" %>	
+	
+		<div id="container">
+		
+	<!-- 상품 공통 검색창 출력 -->
+	<%@ include file="../prod/view/prodView.jsp" %>	
+		<div id="sectionDetail">
+			<div id="detail_container">
+				<div class="asideImg">
+<%-- 					<img id="prodImg" alt="<%= prod.getProd_img() %>" src="<%= prodImgPath %>/<%= prod.getProd_img()%>"> --%>
+					<img id="prodImg" src="<%= request.getContextPath() %>/prod/imageView.do?prod_no=<%= prod.getProd_no() %>">
+				</div>
+				<div class="descInfo">
+					<table border="1">
+						<tr>
+							<td><p class="key">상품명</p></td>
+							<td><p class="value"><%= prod.getProd_name() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">상품 분류 / 상품 분류명</p></td>
+							<td><p class="value"><%= prod.getProd_ctgry_id() %> / <%= ctgry.getProd_ctgry_name() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">소개</p></td>
+							<td><p class="value"><%= prod.getProd_desc() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">상품의 사이즈</p></td>
+							<td><p class="value"><%= prod.getProd_size() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">견종 체급</p></td>
+							<td><p class="value"><%= prod.getProd_weight() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">가격</p></td>
+							<td><p class="value"><%= prod.getProd_price() %></p></td>
+						</tr>
+						<tr>
+							<td><p class="key">상품 수량</p></td>
+							<td>
+								<select name="prod_qty" id="prod_qty">
+									<%
+										for(int i = 1; i <= 50; i++) {
+									%>
+											<option value="<%= i %>"><%= i %></option>
+									<%
+										}
+									%>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="button" id="insertCart" value="장바구니에 담기">
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="button" id="modifyProd" value="수정">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="footer">
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 회사 소개</p>
+		</div>
+		
+		<div style="border: 1px solid black; width: 30%;">
+			<p>대충 지도</p>
+		</div>
+		
+	</div>
+	
+</body>
+
+<script>
+
+	$(function(){
+		
+		//	상품 수정 이벤트
+		$('#modifyProd').on('click', function(){
+			location.href = '<%= request.getContextPath() %>/prod/getSelectProd.do?prodNo=<%= prodNo %>&trigger=Y';
+		})
+		
+		//	상품 삭제 이벤트
+		$('#deleteProd').on('click', function(){
+			location.href = '<%= request.getContextPath() %>/prod/prodDelete.do?prodNo=<%= prodNo %>';
+		})
+		
+		$('#insertCart').on('click', function(){
+			
+// 			qtyPath = $(this).parents('#prod_container').find('#prod_qty');
+// 			prodQty = $(this).parents('#prod_container').find('#prod_qty').val();
+			prodQty = $('#prod_qty option:selected').val();
+			prodNo = <%= prodNo %>
+			
+			<%
+			 if(memberVo == null) {
+			%>
+				alert("로그인이 필요한 기능입니다.");
+			<%
+			} else {
+			%>
+				memberId = "<%= memberVo.getMem_id() %>"
+				$.ajax({
+					url : "<%= request.getContextPath() %>/cart/cartInsert.do",
+					data : { "prodNo" : prodNo,
+							 "prodQty" : prodQty,
+							 "mem_id" : memberId},
+					type : 'post',
+					success : function(result) {
+						if(result.flag == "성공"){
+							alert("상품을 장바구니에 담았습니다.")//
+							
+							if(confirm("장바구니로 이동하시겠습니까?")){
+								location.href="<%= request.getContextPath() %>/cart/cartMain.jsp";
+							}
+						}
+					},
+					error : function(xhr) {
+						alert("상태 : " + xhr.status)
+					},
+					dataType : 'json'
+				})
+			<%
+			}
+			%>
+		})		//	#insertCart 종료
+	})
+</script>
+
+</html>

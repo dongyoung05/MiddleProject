@@ -1,0 +1,152 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script>
+
+
+</script>
+
+
+
+<style>
+.header{
+   display : flex;
+}
+
+.nav{
+   display: flex;
+   justify-content: space-around;
+}
+
+#profile{
+   margin-left : auto;
+   display : flex;
+}
+
+#profile_detail{
+   width : 400px;
+}
+
+
+img{
+   width: 90%;
+   height: 90%;
+   border: dotted 1px red;
+}
+/*  일단 모든 div에 border 주기 */
+div{
+   border: 1px dotted black;
+   margin: 5px;
+}
+/* aside { */
+/* 	width: 15%; */
+/* 	background-color: #FFFFF0; */
+/* } */
+
+#container{
+	width : 15%;
+	height: 1500px;
+	list-style-type: none;
+	text-align : center;
+}
+
+a{
+	display: block;
+	text-decoration-line: none;
+	color : black;
+	font-size : 1.2rem;
+}
+h1{
+	font-size : 1.2rem;
+}
+
+</style>
+</head>
+<body>
+
+
+
+
+
+<!-- 
+   클래스 이름: header - 메인 페이지 맨 위 div
+   요소: logo, profile(명함)
+ -->
+<div class="header">
+   <!-- 로고 이미지 - images폴더에서 사진 가져옴 -->
+   <img src="../images/대충로고1.png" alt="대충로고1.png" style="height: 200px;">
+   
+   <div id="profile" class="profile">
+      <!-- 프로필 이미지 - images 폴더에서 사진 가져옴 추후에 변경해야함 -->
+      <img src="../images/대충회원프로필1.png" alt="대충회원프로필1.png" style="height: 200px;">
+      <!-- 프로필 옆에 문구 + 밑에 버튼 2개 -->
+      <div id="profile_detail">
+         <!-- 이름 -->
+         <p>아무개님 반갑습니다.</p>
+         <input id="login" type="button" value="로그인">
+         <input id="join" type="button" value="회원가입">
+      </div>
+   </div>
+   
+</div>
+
+
+<!--
+   클래스 이름: nav - 메인 페이지 nav
+   요소 : 중분류 요소들 (호텔 소개, 호텔 예약, 미용 예약, 상품, 고객센터)
+ -->
+<div class="nav">
+   
+   <div id="hotel_intro">
+      <h3>호텔 소개</h3>
+   </div>
+   
+   <div id="hotel_reserve">
+      <h3>호텔 예약</h3>
+   </div>
+   
+   <div id="salon_reserve">
+      <h3>미용 예약</h3>
+   </div>
+   
+   <div id="pord_sale">
+      <h3>상품</h3>
+   </div>
+   
+   <div id="hotel_help">
+      <h3>고객 센터</h3>
+   </div>
+
+</div>
+
+<div style="display: flex; height: 800px;">
+	
+	<div id="aside" style="width: 10%; text-align: center;">
+			
+			<a href="computer.html" target="ifr">미용</a>
+			<a href="clothing.html" target="ifr">소개</a>
+			<a href="음악.html" target="ifr">예약 날짜 선택</a>
+			<a href="영화.html" target="ifr">내 예약 조회</a>
+			
+	</div>
+	
+	<div style="width: 88%;">
+		<h2>소개 : </h2>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

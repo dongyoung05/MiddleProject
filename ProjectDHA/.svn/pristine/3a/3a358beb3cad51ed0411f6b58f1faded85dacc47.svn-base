@@ -1,0 +1,143 @@
+<%@page import="kr.or.ddit.vo.ProdVO"%>
+<%@page import="java.util.List"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prod Sale</title>
+<script src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<style>
+	td {
+		width : 150px;
+		height : 150px;
+	}
+	
+	th {
+		width : 150px;
+		height : 150px;
+	}
+</style>
+<script>
+	$(function(){
+		//	로고 클릭시 홈으로
+		$('#logo').on('click', function(){
+			location.href="<%= request.getContextPath()%>/main/main.jsp";
+		})
+		
+		//	중분류 페이지 이동
+		$('#hotel_intro').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelIntro.jsp";
+		})
+		
+		//	호텔 예약 페이지 이동
+		$('#hotel_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelReserve.jsp";
+		})
+		
+		//	미용 예약 페이지 이동
+		$('#salon_reserve').on('click', function(){
+			location.href="<%= request.getContextPath()%>/salon/salonReserve.jsp";
+		})
+		
+		//	애견상품 판매 페이지 이동
+		$('#prod_sale').on('click', function(){
+			location.href="<%= request.getContextPath()%>/prod/getAllProd.do";
+		})
+		
+		//	문의사항 페이지 이동
+		$('#hotel_help').on('click', function(){
+			location.href="<%= request.getContextPath()%>/hotel/hotelHelp.jsp";
+		})
+		
+		//	등록 버튼
+		$('#insertProd').on('click', function(){
+			location.href = "<%= request.getContextPath() %>/prod/prodAdmin.jsp";
+		})
+		
+		
+
+	})
+	
+</script>
+</head>
+<%
+	String imgPath = "../images/main";
+	String prodImgPath = "../images/prod";
+
+	List<ProdVO> prodList = (List<ProdVO>)request.getAttribute("prodList");
+%>
+
+<body>
+<div class="header">
+	<!-- 로고 이미지 - images폴더에서 사진 가져옴 -->
+	<img id="logo" src="<%= imgPath %>/대충로고1.png" alt="대충로고1.png">
+	
+	<div id="profile" class="profile">
+		<!-- 프로필 이미지 - images 폴더에서 사진 가져옴 추후에 변경해야함 -->
+		<img id="profileImg" src="<%= imgPath %>/대충회원프로필1.png" alt="대충회원프로필1.png">
+		<!-- 프로필 옆에 문구 + 밑에 버튼 2개 -->
+		<div id="profile_detail">
+			<!-- 이름 -->
+			<p style="margin-top: 20px;">아무개님 반갑습니다.</p>
+			<a id="login" href="#" style="margin-right: 20px;">로그인</a>
+			<a id="join" href="#">회원가입</a>
+		</div>
+	</div>
+</div>
+
+<div class="nav">
+	
+	<div id="hotel_intro">
+		<h3>소개</h3>
+	</div>
+	
+	<div id="hotel_reserve">
+		<h3>호텔</h3>
+	</div>
+	
+	<div id="salon_reserve">
+		<h3>미용</h3>
+	</div>
+	
+	<div id="prod_sale">
+		<h3>상품</h3>
+	</div>
+	
+	<div id="hotel_help">
+		<h3>Q&A</h3>
+	</div>
+	
+</div>
+
+	<table border="1" id="prod">
+		<tr>
+			<td colspan="4">
+				<input type="button" value="등록" id="insertProd" style="float:right">
+			</td>
+		</tr>
+		<tr>
+			<th><h4>상품번호</h4></th>
+			<th><h4>상품명</h4></th>
+			<th><h4>설명</h4></th>
+			<th><h4>삭제버튼</h4></th>
+			<th><h4>이미지</h4></th>
+		</tr>
+		<%
+			for(ProdVO prod : prodList) {
+		%>
+				<tr>
+					<td><%= prod.getProd_no() %></td>
+					<td><%= prod.getProd_name() %></td>
+					<td><%= prod.getProd_desc() %></td>
+					<td><input type="button" value="삭제"></td>
+					<td><img alt="<%= prod.getProd_img() %>" src=""></td>
+				</tr>
+		<%
+			}
+		%>
+	</table>
+</body>
+</html>

@@ -1,0 +1,92 @@
+package kr.or.ddit.service.board;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.ddit.dao.board.BoardDaoImpl;
+import kr.or.ddit.dao.board.IBoardDao;
+import kr.or.ddit.vo.BoardVO;
+
+
+public class BoardServiceImpl implements IBoardService {
+	private IBoardDao dao;
+	
+	private static BoardServiceImpl service;
+
+	private BoardServiceImpl() {
+		dao = BoardDaoImpl.getInstance();
+	}
+
+	public static BoardServiceImpl getInstance() {
+		if (service == null) {
+			service = new BoardServiceImpl();
+		}
+		return service;
+	}
+
+	@Override
+	public List<BoardVO> boardPrintAll() {
+		return dao.boardPrintAll();
+	}
+
+	@Override
+	public int insertBoard(BoardVO boardVo) {
+		return dao.insertBoard(boardVo);
+	}
+
+	@Override
+	public int updateBoard(BoardVO boardVo) {
+		return dao.updateBoard(boardVo);
+	}
+
+	@Override
+	public int deleteBoard(String board_no) {
+		return dao.deleteBoard(board_no);
+	}
+
+	@Override
+	public BoardVO searchBoardbyBoard_no(String board_no) {
+		return dao.searchBoardbyBoard_no(board_no);
+	}
+
+	@Override
+	public List<BoardVO> getBoard_QUES(String board_ctgry_no) {
+		return dao.getBoard_QUES(board_ctgry_no);
+	}
+	
+	@Override
+	public List<BoardVO> getBoard_ALER(String board_ctgry_no) {
+		return dao.getBoard_ALER(board_ctgry_no);
+	}
+	
+	@Override
+	public List<BoardVO> getBoard_PROD(String board_ctgry_no) {
+		return dao.getBoard_PROD(board_ctgry_no);
+	}
+	
+	@Override
+	public List<BoardVO> getBoard_HOTE(String board_ctgry_no) {
+		return dao.getBoard_HOTE(board_ctgry_no);
+	}
+	
+	@Override
+	public List<BoardVO> getBoard_SALO(String board_ctgry_no) {
+		return dao.getBoard_SALO(board_ctgry_no);
+	}
+
+	@Override
+	public BoardVO viewBoard(int board_no) {
+		return dao.viewBoard(board_no);
+	}
+
+	@Override
+	public int viewPlus(String board_no) {
+		return dao.viewPlus(board_no);
+	}
+
+	
+
+	
+
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="dog">
+	<insert id="insertDog" parameterType="DogVo">
+		insert into dog (dog_no, mem_id, dog_name, dog_breed, dog_gender, dog_birth, dog_weight, dog_img)
+		values( dog_no_seq.nextval, #{mem_id}, #{dog_name}, #{dog_breed}, #{dog_gender}, #{dog_birth}, #{dog_weight}, #{dog_img})
+	</insert>
+	
+	<update id="updateDog" parameterType="DogVo">
+		update dog
+		   set dog_name = #{dog_name}
+		     , dog_breed = #{dog_breed}
+		     , dog_gender = #{dog_gender}
+		     , dog_birth = #{dog_birth}
+		     , dog_weight = #{dog_weight}
+		     , dog_img = #{dog_img}
+		 where dog_no = #{dog_no}     
+	</update>
+	
+	<update id="deleteDog" parameterType="DogVo">
+		update dog
+		   set dog_delyn = 'Y'
+		 where dog_no = #{dog_no} and mem_id = #{mem_id}  
+	</update>
+	
+	<select id="selectAllDog" parameterType="string" resultType="DogVo">
+		select *
+		  from dog
+		 where dog_delyn='N' and mem_id = #{mem_id} 
+	</select>
+	
+	<select id="selectDog" parameterType="DogVo" resultType="DogVo">
+		select * 
+		  from dog
+		 where mem_id=#{mem_id} and dog_no= #{dog_no} and dog_delyn='N'
+	</select>
+		
+</mapper>	

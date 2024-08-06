@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="Prod">
+
+	<!-- 상품 리스트를 가져오는 SQL문 -->
+	<select id="getAllProd" parameterType="Map" resultType="ProdVo">
+		<![CDATA[
+		select * from prod
+		where not prod_delyn = 'Y'
+		]]>
+		
+		<!-- 키워드 검색 값이 있을 경우 -->
+		<if test="!(searchValue == null)">
+		<![CDATA[
+				and prod_name like '%'||#{searchValue}||'%'
+		]]>
+		</if>
+		
+		<!-- 상품 분류 값이 있을 경우 -->
+		<if test="!(ctgryId == null)">
+		<![CDATA[
+				and prod_ctgry_id = #{ctgryId}
+		]]>
+		</if>
+		
+		<!-- 체급 분류 값이 있을 경우 -->
+		<if test="!(wValue == null)">
+		<![CDATA[
+				and ${wKey} = #{wValue}
+		]]>
+		</if>
+		
+		<!-- 정렬 기준 값이 없을 경우 default 는 최신 정렬 -->
+		<if test="sValue == null">
+		<![CDATA[
+				order by prod_no desc
+		]]>
+		</if>
+		<!-- 정렬 기준 값이 있을 경우 default 는 최신 정렬 -->
+		<if test="sValue == 'desc' or sValue =='asc'">
+		<![CDATA[
+				order by ${sKey} ${sValue}
+		]]>
+		</if>
+	</select>
+	
+	<!-- 해당 상품 분류의 상품만 리스트를 가져오는 SQL문 -->
+	<select id="getCtrgyProd" parameterType="String" resultType="ProdVo">
+		select * from prod
+		 where not prod_delyn = 'Y'
+	       and prod_ctgry_id = #{prod_ctgry_id}
+		 order by prod_no desc
+	</select>
+	
+	<!-- 선택한 상품의 정보를 가져오는 SQL문 -->
+	<select id="getSelectProd" parameterType="String" resultType="ProdVo">
+		select * from prod
+		 where not prod_delyn = 'Y'
+		   and prod_no = #{prod_no}
+	</select>
+	
+	<!-- 상품을 새로 등록하는 SQL문 -->
+	<insert id="insertProd" parameterType="ProdVo">
+		insert into prod(prod_no, prod_name, prod_desc, prod_size, prod_color, prod_img, prod_price, prod_delyn, prod_date, prod_ctgry_id, prod_weight)
+		values (fn_create_prod_no(sysdate), #{prod_name}, #{prod_desc}, #{prod_size}, #{prod_color}, #{prod_img}, #{prod_price}, 'N', sysdate, #{prod_ctgry_id}, #{prod_weight} )
+	</insert>
+	
+	<!-- 등록 되어있는 상품의 정보를 수정하는 SQL문 -->
+	<update id="modifyProd" parameterType="ProdVo">
+		update prod
+		   set prod_name  = #{prod_name}
+		     , prod_desc  = #{prod_desc}
+		     , prod_size  = #{prod_size}
+		     , prod_color = #{prod_color}
+		     , prod_img   = #{prod_img}
+		     , prod_price = #{prod_price}
+		     , prod_weight = #{prod_weight}
+		     , prod_ctgry_id = #{prod_ctgry_id}
+		 where prod_no = #{prod_no}
+	</update>
+	
+	<!-- 등록 된 상품을 삭제하는 SQL문 -->
+	<update id="deleteProd" parameterType="String">
+		update prod
+		   set prod_delyn = 'Y'
+		 where prod_no = #{prod_no}
+	</update>
+	
+	<!-- 삭제 된 상품을 되돌리는는 SQL문 -->
+	<update id="deleteResetProd" parameterType="String">
+		update prod
+		   set prod_delyn = 'N'
+		 where prod_no = #{prod_no}
+	</update>
+
+	<!-- 모든 상품분류명을 가져오는 SQL문 -->
+	<select id="getAllCtrgy" resultType="ProdVo">
+		select * from prod_category
+	</select>
+	
+	<!-- 해당 상품분류의 명칭을 가져오는 SQL문 -->
+	<select id="getCtrgyName" parameterType="String" resultType="ProdVo">
+		select * from prod_category where prod_ctgry_id = #{prod_ctgry_id}
+	</select>
+	
+	<!-- 관리자의 상품 관리 페이지 중 상품 목록에서 페이지 뜨게 하기 -->
+	<select id="pageProdAdmin" parameterType="Map" resultType="ProdVo">
+		select A.*
+  		  from (select rownum as rnum, B.*
+                  from (select *
+                          from prod
+                         order by prod_no desc) B
+	<![CDATA[    where rownum <= #{end}) A
+         where A.rnum >= #{start} ]]>
+	</select>
+</mapper>	

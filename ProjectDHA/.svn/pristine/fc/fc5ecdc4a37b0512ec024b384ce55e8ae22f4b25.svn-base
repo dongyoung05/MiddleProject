@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 myBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- 
+	<mapper> 태그의 namespace속성에 설정되는 값은 Java에서
+	SQL문을 호출할 때 같이 사용되는 이름이다.
+	
+ -->	
+<mapper namespace="reserve">
+	
+	<select id="getReserveList" resultType="ReserveVo">
+		select * from reserve
+	</select>	
+		
+	<select id="getSalonReserveList" resultType="ReserveVo">
+		select * from reserve
+		where salon_no is not null
+	</select>	
+	
+	<select id="chkSalonReserveList" parameterType="String" resultType="int">
+		select count(*) from reserve
+		where To_TIMESTAMP(#{date}, 'YYYY-MM-DD HH24:MI:SS.FF') 
+			  between RESERVE_IN and RESERVE_OUT
+			  and room_no is null
+	</select>
+	
+	<insert id="insertSalonReserve" parameterType="ReserveVo">
+		insert into reserve
+		values(
+    		'sa-'||to_char(SALO_SEQ.nextval), 
+    		To_TIMESTAMP(#{reserve_in}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+    		To_TIMESTAMP(#{reserve_out}, 'YYYY-MM-DD HH24:MI:SS.FF'),
+   	 		(select salon_price
+   	 		from salon 
+   	 		where salon_no = #{salon_no}),
+    		sysdate,
+    		'N',
+    		#{salon_no},
+    		null,
+    		#{dog_no},
+    		#{mem_id}
+		)
+	</insert>
+	
+	
+</mapper>	

@@ -1,0 +1,132 @@
+package kr.or.ddit.service.board;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.ddit.dao.board.BoardDaoImpl;
+import kr.or.ddit.dao.board.IBoardDao;
+import kr.or.ddit.vo.BoardVO;
+import kr.or.ddit.vo.PageVO;
+
+
+public class BoardServiceImpl implements IBoardService {
+	private IBoardDao dao;
+	
+	private static BoardServiceImpl service;
+
+	private BoardServiceImpl() {
+		dao = BoardDaoImpl.getInstance();
+	}
+
+	public static BoardServiceImpl getInstance() {
+		if (service == null) {
+			service = new BoardServiceImpl();
+		}
+		return service;
+	}
+
+	@Override
+	public List<BoardVO> boardPrintAll() {
+		// TODO Auto-generated method stub
+		return dao.boardPrintAll();
+	}
+
+	@Override
+	public int insertBoard(BoardVO boardVo) {
+		// TODO Auto-generated method stub
+		return dao.insertBoard(boardVo);
+	}
+
+	@Override
+	public int updateBoard(BoardVO boardVo) {
+		// TODO Auto-generated method stub
+		return dao.updateBoard(boardVo);
+	}
+
+	@Override
+	public int deleteBoard(int board_no) {
+		// TODO Auto-generated method stub
+		return dao.deleteBoard(board_no);
+	}
+
+	@Override
+	public List<BoardVO> searchBoardbyTitle(String board_title) {
+		// TODO Auto-generated method stub
+		return dao.searchBoardbyTitle(board_title);
+	}
+
+	@Override
+	public List<BoardVO> searchBoardbyId(String mem_id) {
+		// TODO Auto-generated method stub
+		return dao.searchBoardbyId(mem_id);
+	}
+
+	@Override
+	public BoardVO viewBoard(int board_no) {
+		// TODO Auto-generated method stub
+		return dao.viewBoard(board_no);
+	}
+
+	@Override
+	public int viewUpdate(int board_no) {
+		// TODO Auto-generated method stub
+		return dao.viewUpdate(board_no);
+	}
+
+	@Override
+	public PageVO getPageInfo(int page, String stype, String sword) {
+		
+				PageVO pageVo = new PageVO();
+				//전체글 갯수 구하기 
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("stype", stype);
+				map.put("sword", sword);
+				int count = this.getTotalCount(map);
+				
+				//전체 페이지수 구하기
+				int plist = PageVO.getPerList();
+				int totalPage = (int)(Math.ceil((double)count / plist));
+				
+				//마지막 모든 데이터(9라고 가정)가 삭제되었을 경우 currentPage=9인 값을
+				// currentPage=8로 수정되어야 한다.
+				if(page > totalPage) page = totalPage;
+				
+				
+				//start end
+				//1페이지 : 1~3, 2페이지 : 4~6 3페이지 7~9
+				//7페이지 : 19~20
+				int start = (page-1) * plist+1;
+				int end = start + plist-1;
+				
+				if(end > count) end = count;
+				
+				//startPage, endPage
+				int ppage = PageVO.getPerPage(); //2
+				int startPage = ((page-1)/ppage*ppage)+1;
+				int endPage = startPage + ppage - 1;
+				
+				if(endPage > totalPage) endPage = totalPage;
+				
+				pageVo.setStart(start);
+				pageVo.setEnd(end);
+				pageVo.setStartpage(startPage);
+				pageVo.setEndPage(endPage);
+				pageVo.setTotalpage(totalPage);
+				
+				return pageVo;
+			}
+
+	@Override
+	public int getTotalCount(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<BoardVO> selectByPage(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

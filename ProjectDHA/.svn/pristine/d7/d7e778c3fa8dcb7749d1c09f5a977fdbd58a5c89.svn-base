@@ -1,0 +1,181 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="java.util.List"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mypage</title>
+
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/MainPage.css">
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/중분류페이지공통스타일.css">
+<style type="text/css">
+.dogImg{
+	width: 200px;
+	height: 200px;
+}
+</style>
+
+</head>
+
+<%
+	
+	MemberVO memberVo = (MemberVO)session.getAttribute("loginok");
+	String imgPath = "../images/main";
+	List<DogVO> dlist = (List<DogVO>)session.getAttribute("myDogList");
+	
+%>
+<script type="text/javascript">
+
+$(function(){
+	// 로고 클릭시 홈으로
+	   $('#logo').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/main/main.jsp";
+	   })
+	   
+	   // 중분류 페이지 이동
+	   $('#hotel_intro').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/hotel/hotelIntro.jsp";
+	   })
+	   
+	   $('#hotel_reserve').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/hotel/hotelReserve.jsp";
+	   })
+	   
+	   $('#salon_reserve').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/salon/salonIntro.jsp";
+	   })
+	   
+	   $('#prod_sale').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/prod/getAllProd.do";
+	   })
+	   
+	   $('#hotel_help').on('click', function(){
+	      location.href="<%= request.getContextPath()%>/board/Q&A.jsp";
+	   })
+		
+		$('#insertDog').click(function(){
+			location.href="dog/dogInsert.jsp?mem_id=<%=memberVo.getMem_id()%>";
+		})
+		
+		$('#updateMember').click(function(){
+			location.href="member/UpdateMember.jsp";
+		})
+		$('#p1').click(function(){	// 회원정보
+			location.href="<%=request.getContextPath()%>/member/mypageMember2.jsp";
+		})
+		$('#p2').click(function(){	// 반려견 정보
+			location.href="<%=request.getContextPath()%>/dog/mypageDog.jsp";
+		})
+		$('#p3').click(function(){	// 아직안정함
+			
+		})
+		$('#p4').click(function(){ // 회원탈퇴
+			path = '<%=request.getContextPath() %>';
+			mem_id = '<%=memberVo.getMem_id() %>';
+			
+			
+			if(confirm("정말 삭제하시겠습니까?")){
+				$.ajax({
+					url : `${path}/deleteMember.do`,
+					data : {"mem_id" : mem_id},
+					dataType : 'json',
+					success : function(res){
+						alert('이용해 주셔서 감사합니다.');
+						location.href="logoutMember.do";
+					},
+					error : function(xhr){
+						alert('상태 : '+ xhr.status);
+					},
+					type : 'post'
+				})	
+			} else {
+				cofirm('삭제를 취소했습니다.');
+			}
+			
+			
+		})
+	})
+
+</script>
+<body>
+
+
+<div class="header">
+		<!-- 로고 이미지 - images폴더에서 사진 가져옴 -->
+		<img id="logo" src="<%= request.getContextPath() %>/images/main/DHA_logo3.png" alt="DHA_logo3.png">
+		
+		<div id="profile" class="profile">
+			<%
+			if(memberVo == null){			
+			%>	
+			<img id="profileImg" src="<%= request.getContextPath() %>/images/main/대충회원프로필1.png" alt="대충회원프로필1.png">
+			<div id="profile_detail">
+				<!-- 이름 -->
+				<p>로그인이 필요합니다.</p>
+				<a href="<%= request.getContextPath() %>/member/LoginMember.jsp">로그인</a>
+				<a href="<%= request.getContextPath() %>/member/InsertMember.jsp">회원가입</a>
+			</div>	
+			<%
+			} else {
+			%>		
+			<img id="profileImg" src="<%= request.getContextPath() %>/images/member/<%=memberVo.getMem_img() %>" alt="대충회원프로필1.png">
+			<!-- 프로필 옆에 문구 + 밑에 버튼 2개 -->
+			<div id="profile_detail">
+				<!-- 이름 -->
+				<p><%=memberVo.getMem_name() %>님 반갑습니다.</p>
+				<a href="<%= request.getContextPath() %>/selectMember.do?mem_id=<%=memberVo.getMem_id()%>">마이페이지</a>
+				<a href="<%= request.getContextPath() %>/logoutMember.do">로그아웃</a>
+			</div>	
+			<%
+			}
+			%>
+		</div>
+	</div>
+
+	<div class="nav">
+		<div id="hotel_intro">
+			<h3>소개</h3>
+		</div>
+		
+		<div id="hotel_reserve">
+			<h3>호텔</h3>
+		</div>
+		
+		<div id="salon_reserve">
+			<h3>미용</h3>
+		</div>
+		
+		<div id="prod_sale">
+			<h3>상품</h3>
+		</div>
+		
+		<div id="hotel_help">
+			<h3>Q&A</h3>
+		</div>
+	</div>
+	
+	
+	<div id="title">
+		<h2>마이페이지</h2>
+	</div>
+	
+	<div id="side">
+		<p id="p1">회원정보</p>		
+		<p id="p2">반려견정보</p>		
+		<p id="p3">찾아오는 길</p>		
+		<p id="p4">회원탈퇴</p>		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+</body>
+</html>

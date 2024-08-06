@@ -1,0 +1,47 @@
+package kr.or.ddit.service.reserve;
+
+import java.util.List;
+
+import kr.or.ddit.dao.reserve.IReserveDao;
+import kr.or.ddit.dao.reserve.ReserveDaoImpl;
+import kr.or.ddit.vo.ReserveVO;
+
+public class ReserveServiceImpl implements IReserveService{
+	private static IReserveService service;
+	
+	private IReserveDao dao;
+	
+	private ReserveServiceImpl() {
+		dao = ReserveDaoImpl.getInstance();
+	}
+	
+	public static IReserveService getInstance() {
+		if(service == null) service = new ReserveServiceImpl();
+		return service;
+	}
+
+	@Override
+	public List<ReserveVO> getReserveList() {
+		return dao.getReserveList();
+	}
+
+	@Override
+	public List<ReserveVO> getSalonReserveList() {
+		return dao.getSalonReserveList();
+	}
+	
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

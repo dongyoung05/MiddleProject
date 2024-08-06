@@ -1,0 +1,53 @@
+<%@page import="kr.or.ddit.vo.DogVO"%>
+<%@page import="kr.or.ddit.vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@ include file="/view/MypageView.jsp" %>
+
+<%
+	DogVO dogVo = (DogVO)request.getAttribute("dogvo");
+%>
+<title>Insert title here</title>
+<script src="<%=request.getContextPath() %>/js/jquery-3.7.1.min.js"></script>
+<script>
+	$(function(){
+		$('#updateBtn').click(function(){
+			
+			dog_no = <%= dogVo.getDog_no() %>;
+	        location.href = `<%= request.getContextPath() %>/dog/dogUpdate.jsp?dog_no=${dog_no}`;
+		});
+		
+		$('#deleteBtn').click(function(){
+			if(confirm('정말 삭제하시겠습니까?')){
+				
+				location.href="<%=request.getContextPath()%>/dogDelete.do?mem_id=<%=memberVo.getMem_id() %>&dog_no=<%=dogVo.getDog_no() %>";
+				
+			} else {
+				alert('삭제실패');
+			}
+		})
+	});
+</script>
+
+
+</head>
+
+<body>
+<h1>조회한 반려견 상세정보</h1>
+<h1><%=dogVo.getDog_name() %></h1>
+<h1><%=dogVo.getDog_gender() %></h1>
+<h1><%=dogVo.getDog_breed() %></h1>
+<h1><%=dogVo.getDog_weight() %></h1>
+<h1><%=dogVo.getDog_birth() %></h1>
+<h1><%=dogVo.getDog_img() %></h1>
+<input type="button" value="반려견 정보 수정" id="updateBtn">
+<input type="button" value="반려견 정보 삭제" id="deleteBtn">
+
+
+
+</body>
+</html>
